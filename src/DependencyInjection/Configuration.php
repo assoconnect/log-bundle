@@ -20,7 +20,7 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('includedEntities')
                             ->scalarPrototype()->end()
                         ->end()
-                        ->arrayNode('excludeEntities')
+                        ->arrayNode('excludedEntities')
                             ->scalarPrototype()->end()
                         ->end()
                     ->end()

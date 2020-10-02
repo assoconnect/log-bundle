@@ -23,6 +23,6 @@ class LogExtension extends Extension
 
         $definition = $container->getDefinition(LoggerSubscriber::class);
         $definition->replaceArgument('$includedEntities', $config['log_filters']['includedEntities']);
-        $definition->replaceArgument('$excludeEntities', $config['log_filters']['excludeEntities']);
+        $definition->replaceArgument('$excludedEntities', $config['log_filters']['excludedEntities']);
     }
 }

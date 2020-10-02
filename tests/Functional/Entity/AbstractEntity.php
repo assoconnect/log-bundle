@@ -15,6 +15,7 @@ abstract class AbstractEntity
 
     public function __construct()
     {
+        $this->id = rand(0, 10000000);
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -29,7 +30,6 @@ abstract class AbstractEntity
      *
      * @ORM\Id
      * @ORM\Column(type="integer", unique=true)
-     * @ORM\GeneratedValue()
      */
     private int $id;
 

@@ -1,0 +1,36 @@
+framework:
+  test: ~
+  secret: test
+  profiler:
+    enabled: false
+  validation:
+    enabled: true
+    enable_annotations: true
+doctrine:
+  orm:
+    mappings:
+      AssoConnect:
+        is_bundle: false
+        type: annotation
+        dir: '%kernel.project_dir%/tests/Functional/Entity'
+        prefix: 'AssoConnect\LogBundle\Tests\Functional\Entity'
+        alias: App
+  dbal:
+    driver: 'pdo_mysql'
+    server_version: '5.7'
+
+log:
+  log_filters:
+    includedEntities: []
+    excludedEntities: []
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  AssoConnect\LogBundle\Tests\Functional\Service\LogFactory:
+    autowire: true
+
+  AssoConnect\LogBundle\Factory\LogFactoryInterface: '@AssoConnect\LogBundle\Tests\Functional\Service\LogFactory'

@@ -15,4 +15,4 @@ services:
   AssoConnect\LogBundle\Subscriber\LoggerSubscriber:
     arguments:
       $includedEntities: []
-      $excludeEntities: []
+      $excludedEntities: []
