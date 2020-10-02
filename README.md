@@ -41,10 +41,5 @@ AND NOT an instanceof or is_subclass_of at least one element of the exclude list
 
 ## How-to
 
-* Create a project at [SonarCloud](https://sonarcloud.io/projects/create) with `assoconnect-log-bundle` as key and `log-bundle` as display name
-* Get a [SonarCloud token](https://sonarcloud.io/account/security/) then add it as the `SONAR_TOKEN` environnement variable on Travis CI at https://travis-ci.com/github/assoconnect/log-bundle/settings
-* Code must be placed in `src`
-* Tests must be placed in `tests`
 * Publish it at [Packagist](https://packagist.org/packages/submit)
-* Write a relevant README
 * Remove this how-to section of the README
