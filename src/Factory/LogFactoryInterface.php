@@ -6,7 +6,10 @@ namespace AssoConnect\LogBundle\Factory;
 
 use AssoConnect\LogBundle\Entity\Log;
 
+/**
+ * Factory called in the LoggerSubscriber to create the Log entity.
+ */
 interface LogFactoryInterface
 {
-    public function createLogFromEntity(Object $entity, string $entityColumn, string $oldValue = null): Log;
+    public function createLogFromEntity(object $entity, string $entityColumn, string $oldValue = null): Log;
 }

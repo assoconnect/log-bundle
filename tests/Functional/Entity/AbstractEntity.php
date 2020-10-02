@@ -8,7 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
  */
 abstract class AbstractEntity
 {
@@ -76,17 +75,5 @@ abstract class AbstractEntity
         $this->updatedAt = $updatedAt;
 
         return $this;
-    }
-
-    /**
-     * LIFECYCLE CALLBACKS
-     */
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        $this->setUpdatedAt(new \DateTime('@' . time()));
     }
 }

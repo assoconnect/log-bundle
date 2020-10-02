@@ -11,6 +11,30 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
 
+/**
+ * This Doctrine subscriber creates a Log entity every time a fully Doctrine-managed entity is persisted,
+ * updated or removed.
+ * A system of include and exclude entities can be used to decide which entities has to be logged.
+ * Log.yaml format:
+ *
+ * log:
+ *   log_filters:
+ *       includedEntities: ['App\Entity\includeEntity1', 'App\Entity\includeEntity2']
+ *       excludeEntities: ['App\Entity\excludeEntity1', 'App\Entity\excludeEntity2']
+ *
+ * If both lists are empty, every entities will be logged.
+ *
+ * If only includedEntities is empty,
+ * everything will be logged unless the processed entity is
+ * an instanceof OR is_subclass_of at least one element of the exclude list.
+ *
+ * If only excludeEntities is empty,
+ * only the entities instanceof OR is_subclass_of at least one element of the include list will be logged.
+ *
+ * If both lists are not empty,
+ * the entity has to be an instanceof OR is_subclass_of at least one element of the include list
+ * AND NOT an instanceof or is_subclass_of at least one element of the exclude list.
+ */
 class LoggerSubscriber implements EventSubscriber
 {
     private LogSerializer $formatter;
