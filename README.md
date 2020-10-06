@@ -15,7 +15,7 @@ This Symfony4 bundle provides a system creating a Log entity every time a fully 
 
 The Log entity and the LogFactoryInterface have to be implemented.
 
-A system of include and exclude entities can be used to decide which entities have to be logged.
+A system of included and excluded entities can be used to decide which entities have to be logged.
 
 Log.yaml format:
 ```
