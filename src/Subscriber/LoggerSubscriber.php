@@ -104,7 +104,7 @@ class LoggerSubscriber implements EventSubscriber
     private function isSubClassFromList($entity, array $classes): bool
     {
         foreach ($classes as $class) {
-            if ($entity instanceof $class || is_subclass_of($entity, $class)) {
+            if (is_a($entity, $class)) {
                 return true;
             }
         }

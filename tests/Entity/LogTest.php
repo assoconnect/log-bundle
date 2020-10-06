@@ -29,6 +29,39 @@ class LogTest extends TestCase
         $this->assertSame($date, $entity->getCreatedAt());
     }
 
+    /**
+     * @dataProvider createBaseDoctrineLog
+     */
+    public function testRequestMethod(FunctionalLog $functionalLog)
+    {
+        $requestMethod = 'request method';
+
+        $functionalLog->setRequestMethod($requestMethod);
+        $this->assertSame($requestMethod, $functionalLog->getRequestMethod());
+    }
+
+    /**
+     * @dataProvider createBaseDoctrineLog
+     */
+    public function testRequestUrl(FunctionalLog $functionalLog)
+    {
+        $requestUrl = 'https://www.doctrine.org';
+
+        $functionalLog->setRequestUrl($requestUrl);
+        $this->assertSame($requestUrl, $functionalLog->getRequestUrl());
+    }
+
+    /**
+     * @dataProvider createBaseDoctrineLog
+     */
+    public function testRequestIp(FunctionalLog $functionalLog)
+    {
+        $requestIp = '127.0.0.1';
+
+        $functionalLog->setRequestIp($requestIp);
+        $this->assertSame($requestIp, $functionalLog->getRequestIp());
+    }
+
     private function createBaseDoctrineLog(): FunctionalLog
     {
         return new FunctionalLog(
@@ -40,32 +73,5 @@ class LogTest extends TestCase
             'request trace',
             new \Datetime()
         );
-    }
-
-    public function testRequestMethod()
-    {
-        $requestMethod = 'request method';
-
-        $entity = $this->createBaseDoctrineLog();
-        $entity->setRequestMethod($requestMethod);
-        $this->assertSame($requestMethod, $entity->getRequestMethod());
-    }
-
-    public function testRequestUrl()
-    {
-        $requestUrl = 'https://www.doctrine.org';
-
-        $entity = $this->createBaseDoctrineLog();
-        $entity->setRequestUrl($requestUrl);
-        $this->assertSame($requestUrl, $entity->getRequestUrl());
-    }
-
-    public function testRequestIp()
-    {
-        $requestIp = '127.0.0.1';
-
-        $entity = $this->createBaseDoctrineLog();
-        $entity->setRequestIp($requestIp);
-        $this->assertSame($requestIp, $entity->getRequestIp());
     }
 }

@@ -37,21 +37,11 @@ abstract class Log
      */
     protected UuidInterface $id;
 
-    public function getId(): string
-    {
-        return $this->id->__toString();
-    }
-
     /**
      * @Assert\NotBlank()
      * @ORM\Column(type="string")
      */
     protected string $entityClass = '';
-
-    public function getEntityClass(): string
-    {
-        return $this->entityClass;
-    }
 
     /**
      * @Assert\NotBlank()
@@ -59,30 +49,10 @@ abstract class Log
      */
     protected string $entityColumn = '';
 
-    public function getEntityColumn(): string
-    {
-        return $this->entityColumn;
-    }
-
     /**
      * @ORM\Column(type="text", length=65535, nullable=true)
      */
-    protected ?string $entityOldValue = '';
-
-    public function getEntityOldValue(): ?string
-    {
-        return $this->entityOldValue;
-    }
-
-    /**
-     * @ORM\Column(type="uuid_binary_ordered_time")
-     */
-    protected string $entityId;
-
-    public function getEntityId(): string
-    {
-        return $this->entityId;
-    }
+    protected ?string $entityOldValue = null;
 
     /**
      * @Assert\NotBlank()
@@ -90,20 +60,15 @@ abstract class Log
      */
     protected string $requestTrace = '';
 
-    public function getRequestTrace(): string
-    {
-        return $this->requestTrace;
-    }
+    /**
+     * @ORM\Column(type="uuid_binary_ordered_time")
+     */
+    protected string $entityId;
 
     /**
      * @ORM\Column(type="string")
      */
     protected string $requestMethod = '';
-
-    public function getRequestMethod(): string
-    {
-        return $this->requestMethod;
-    }
 
     /**
      * @ORM\Column(type="text", length=65535)
@@ -111,34 +76,68 @@ abstract class Log
      */
     protected string $requestUrl = '';
 
-    public function getRequestUrl(): string
-    {
-        return $this->requestUrl;
-    }
 
     /**
      * @ORM\Column(type="ip")
      */
     protected string $requestIp = '';
 
-    public function getRequestIp(): string
-    {
-        return $this->requestIp;
-    }
-
     /**
      * @ORM\Column(type="datetime")
      */
     protected \DateTime $createdAt;
+
+    public function getId(): string
+    {
+        return $this->id->__toString();
+    }
+
+    public function getEntityClass(): string
+    {
+        return $this->entityClass;
+    }
+
+    public function getEntityColumn(): string
+    {
+        return $this->entityColumn;
+    }
+
+    public function getEntityOldValue(): ?string
+    {
+        return $this->entityOldValue;
+    }
+
+    public function getEntityId(): string
+    {
+        return $this->entityId;
+    }
+
+    public function getRequestTrace(): string
+    {
+        return $this->requestTrace;
+    }
+
+    public function getRequestMethod(): string
+    {
+        return $this->requestMethod;
+    }
+
+    public function getRequestUrl(): string
+    {
+        return $this->requestUrl;
+    }
+
+
+    public function getRequestIp(): string
+    {
+        return $this->requestIp;
+    }
 
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param string $requestMethod
-     */
     public function setRequestMethod(string $requestMethod): self
     {
         $this->requestMethod = $requestMethod;
@@ -146,9 +145,6 @@ abstract class Log
         return $this;
     }
 
-    /**
-     * @param string $requestUrl
-     */
     public function setRequestUrl(string $requestUrl): self
     {
         $this->requestUrl = $requestUrl;
@@ -156,9 +152,6 @@ abstract class Log
         return $this;
     }
 
-    /**
-     * @param string $requestIp
-     */
     public function setRequestIp(string $requestIp): self
     {
         $this->requestIp = $requestIp;
