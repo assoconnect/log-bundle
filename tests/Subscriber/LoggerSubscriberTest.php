@@ -8,6 +8,7 @@ use AssoConnect\LogBundle\Factory\LogFactoryInterface;
 use AssoConnect\LogBundle\Serializer\LogSerializer;
 use AssoConnect\LogBundle\Subscriber\LoggerSubscriber;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
+use AssoConnect\LogBundle\Tests\Functional\Entity\Post;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Tag;
 use AssoConnect\LogBundle\Tests\Functional\Service\LogFactory;
 use AssoConnect\PHPDate\AbsoluteDate;
@@ -35,7 +36,7 @@ class LoggerSubscriberTest extends KernelTestCase
         );
     }
 
-    public function testSubcriberCorrectLogsCreation()
+    public function testSubscriberCorrectLogsCreation()
     {
         $em = $this->createMock(EntityManagerInterface::class);
         $unitOfWork = $this->createMock(UnitOfWork::class);
@@ -45,9 +46,10 @@ class LoggerSubscriberTest extends KernelTestCase
 
         $unitOfWork->expects($this->once())->method('getScheduledEntityInsertions')->willReturn([new Author()]);
         $unitOfWork->expects($this->once())->method('getScheduledEntityUpdates')->willReturn(
-            [$updatedAuthor = new Author()]
+            [$updatedAuthor = new Author(), new Post(new Author())]
         );
-        $unitOfWork->expects($this->once())->method('getScheduledEntityDeletions')->willReturn([new Tag()]);
+        $unitOfWork->expects($this->once())->method('getScheduledEntityDeletions')
+            ->willReturn([new Tag(), new Author()]);
         $unitOfWork->method('getEntityChangeSet')->with($updatedAuthor)->willReturn(
             [
                 'email'         => ['test@gmail.com'],
@@ -60,16 +62,16 @@ class LoggerSubscriberTest extends KernelTestCase
         );
         $classMetaData->expects($this->once())->method('getFieldNames')->willReturn(['email', 'registeredAt']);
 
-        $em->expects($this->exactly(3))->method('persist');
-        $cmf->expects($this->exactly(3))->method('getMetadataFor')
+        $em->expects($this->exactly(4))->method('persist');
+        $cmf->expects($this->exactly(4))->method('getMetadataFor')
             ->willReturn($this->createMock(ClassMetadata::class));
-        $unitOfWork->expects($this->exactly(3))->method('computeChangeSet');
+        $unitOfWork->expects($this->exactly(4))->method('computeChangeSet');
 
         $subscriber = new LoggerSubscriber(
             $this->createMock(LogSerializer::class),
             new LogFactory(),
             ['AssoConnect\LogBundle\Tests\Functional\Entity\Author'],
-            []
+            ['AssoConnect\LogBundle\Tests\Functional\Entity\Post']
         );
 
         $event = new OnFlushEventArgs($em);
