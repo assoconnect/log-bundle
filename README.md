@@ -36,9 +36,3 @@ only the entities instanceof OR is_subclass_of at least one element of the inclu
 If both lists are not empty,
 the entity has to be an instanceof OR is_subclass_of at least one element of the include list
 AND NOT an instanceof or is_subclass_of at least one element of the exclude list.
-
-
-## How-to
-
-* Publish it at [Packagist](https://packagist.org/packages/submit)
-* Remove this how-to section of the README
