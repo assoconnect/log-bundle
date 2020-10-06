@@ -30,7 +30,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @dataProvider createBaseDoctrineLog
+     * @dataProvider createBaseDoctrineLogDataProvider
      */
     public function testRequestMethod(FunctionalLog $functionalLog)
     {
@@ -41,7 +41,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @dataProvider createBaseDoctrineLog
+     * @dataProvider createBaseDoctrineLogDataProvider
      */
     public function testRequestUrl(FunctionalLog $functionalLog)
     {
@@ -52,7 +52,7 @@ class LogTest extends TestCase
     }
 
     /**
-     * @dataProvider createBaseDoctrineLog
+     * @dataProvider createBaseDoctrineLogDataProvider
      */
     public function testRequestIp(FunctionalLog $functionalLog)
     {
@@ -62,16 +62,18 @@ class LogTest extends TestCase
         $this->assertSame($requestIp, $functionalLog->getRequestIp());
     }
 
-    private function createBaseDoctrineLog(): FunctionalLog
+    public function createBaseDoctrineLogDataProvider(): \Iterator
     {
-        return new FunctionalLog(
-            $this->createMock(UuidInterface::class),
-            'entityClass',
-            'entityColumn',
-            'oldValue',
-            'f749d691-a546-424c-842a-1728a4e96250',
-            'request trace',
-            new \Datetime()
-        );
+        yield 'basic Log' => [
+            new FunctionalLog(
+                $this->createMock(UuidInterface::class),
+                'entityClass',
+                'entityColumn',
+                'oldValue',
+                'f749d691-a546-424c-842a-1728a4e96250',
+                'request trace',
+                new \Datetime()
+            )
+        ];
     }
 }
