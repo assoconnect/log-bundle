@@ -51,6 +51,11 @@ class LogSerializer
         return $data;
     }
 
+    /**
+     * Returns a formatted value of a given entities' field
+     *
+     * @return array|string
+     */
     public function formatField(object $entity, string $field)
     {
         if ($this->propertyAccessor->isReadable($entity, $field)) {
@@ -62,6 +67,11 @@ class LogSerializer
         return $this->formatValue($value);
     }
 
+    /**
+     * Returns a formatted value depending of the given value's type.
+     *
+     * @return array|string
+     */
     public function formatValue($value)
     {
         switch (gettype($value)) {

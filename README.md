@@ -1,7 +1,7 @@
 # AssoConnectLogBundle
 
 [![Build Status](https://travis-ci.org/assoconnect/log-bundle.svg?branch=master)](https://travis-ci.org/assoconnect/log-bundle)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=assoconnect-log-bundle&metric=alert_status)](https://sonarcloud.io/dashboard?id=assoconnect-log-bundle)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=assoconnect_log-bundle&metric=alert_status)](https://sonarcloud.io/dashboard?id=assoconnect_log-bundle)
 
 
 ## Installation
@@ -11,8 +11,7 @@ composer require assoconnect/log-bundle
 
 ## Description
 
-This Symfony4 bundle provides a system creating a Log entity every time a fully Doctrine-managed entity is persisted,
-updated or removed.
+This Symfony4 bundle provides a system creating a Log entity every time a fully Doctrine-managed entity is persisted, updated or removed.
 
 The Log entity and the LogFactoryInterface have to be implemented.
 
@@ -22,8 +21,8 @@ Log.yaml format:
 ```
 log:
     log_filters:
-        includedEntities: ['App\Entity\includeEntity1', 'App\Entity\includeEntity2']
-        excludeEntities: ['App\Entity\excludeEntity1', 'App\Entity\excludeEntity2']
+        includedEntities: ['App\Entity\includedEntity1', 'App\Entity\includedEntity2']
+        excludeEntities: ['App\Entity\excludedEntity1', 'App\Entity\excludedEntity2']
 ```
 
 If both lists are empty, every entities will be logged.
