@@ -11,7 +11,6 @@ use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Post;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Tag;
 use AssoConnect\LogBundle\Tests\Functional\Service\LogFactory;
-use AssoConnect\PHPDate\AbsoluteDate;
 use Doctrine\Common\EventManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -53,7 +52,7 @@ class LoggerSubscriberTest extends KernelTestCase
         $unitOfWork->method('getEntityChangeSet')->with($updatedAuthor)->willReturn(
             [
                 'email'         => ['test@gmail.com'],
-                'registeredAt'  => [new AbsoluteDate('2020-10-06')],
+                'registeredAt'  => [new \DateTime('2020-10-06')],
                 'unmappedField' => ['test']
             ]
         );

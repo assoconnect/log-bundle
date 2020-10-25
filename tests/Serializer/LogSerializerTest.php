@@ -10,8 +10,6 @@ use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
 use AssoConnect\LogBundle\Tests\Functional\Entity\ObjectWithoutId;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Post;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Tag;
-use AssoConnect\PHPDate\AbsoluteDate;
-use AssoConnect\PHPPercent\Percent;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Money\Currency;
@@ -25,7 +23,7 @@ class LogSerializerTest extends KernelTestCase
         self::bootKernel();
 
         $author = new Author();
-        $author->setRegisteredAt(new AbsoluteDate('2020-02-18'));
+        $author->setEmail('test@gmail.com');
 
         $tag = new Tag();
 
@@ -40,7 +38,7 @@ class LogSerializerTest extends KernelTestCase
                 $this->helperFormatEntity($author),
                 [
                     'email'        => $author->getEmail(),
-                    'registeredAt' => '2020-02-18',
+                    'registeredAt' => $author->getRegisteredAt()->format(\DateTime::ISO8601),
                 ]
             ),
             $formatter->formatEntity($entityManager, $author)
@@ -119,11 +117,10 @@ class LogSerializerTest extends KernelTestCase
         $provider[] = [1, 1];
         $provider[] = [1.5, 1.5];
         $provider[] = [new \DateTime('@1529500134'), '2018-06-20T13:08:54+0000'];
-        $provider[] = [new Percent(10), '10'];
         $provider[] = [Money::EUR(100), '100 EUR'];
         $provider[] = [new Currency('EUR'), 'EUR'];
 
-        $entity = new Author();
+        $entity = new Author('email@gmail.com');
         $provider[] = [$entity, $entity->getId()];
 
         // Array
