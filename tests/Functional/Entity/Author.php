@@ -2,7 +2,6 @@
 
 namespace AssoConnect\LogBundle\Tests\Functional\Entity;
 
-use AssoConnect\PHPDate\AbsoluteDate;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,7 +13,7 @@ class Author extends AbstractEntity
     public function __construct()
     {
         parent::__construct();
-        $this->registeredAt = new AbsoluteDate('2020-01-01');
+        $this->registeredAt = new \DateTime();
         $this->posts = new ArrayCollection();
     }
 
@@ -26,7 +25,7 @@ class Author extends AbstractEntity
     /**
      * @ORM\Column(type="date_absolute")
      */
-    protected AbsoluteDate $registeredAt;
+    protected \DateTimeInterface $registeredAt;
 
     /**
      * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
@@ -43,15 +42,8 @@ class Author extends AbstractEntity
         $this->email = $email;
     }
 
-    public function getRegisteredAt(): AbsoluteDate
+    public function getRegisteredAt(): \DateTimeInterface
     {
         return $this->registeredAt;
-    }
-
-    public function setRegisteredAt(AbsoluteDate $registeredAt): self
-    {
-        $this->registeredAt = $registeredAt;
-
-        return $this;
     }
 }

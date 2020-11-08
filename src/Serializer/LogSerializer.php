@@ -100,23 +100,22 @@ class LogSerializer
      */
     private function formatObject($value)
     {
-        if ($value instanceof AbsoluteDate) {
-            return $value->__toString();
-        }
-        if ($value instanceof Currency) {
-            return $value->getCode();
-        }
         if ($value instanceof Money) {
+            // Required because Money does not provide a __toString() method
+            // @link https://github.com/moneyphp/money/issues/184
             // Case when we change the amount of a Money in one of our entities.
             // We log amount & currency code for log readability.
             return $value->getAmount() . ' ' . $value->getCurrency()->getCode();
         }
+
         if (method_exists($value, 'getId')) {
             return $value->getId();
         }
+
         if ($value instanceof \DateTime) {
             return $value->format(\DateTime::ISO8601);
         }
+
         if ($value instanceof Collection) {
             $values = $value->toArray();
             array_walk(
@@ -127,7 +126,8 @@ class LogSerializer
             );
             return $values;
         }
-        if ($value instanceof Percent) {
+
+        if (method_exists($value, '__toString')) {
             return $value->__toString();
         }
 
