@@ -25,7 +25,7 @@ class LogSerializer
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
-    public function formatEntity(EntityManagerInterface $entityManager, object $entity): iterable
+    public function formatEntity(EntityManagerInterface $entityManager, object $entity): array
     {
         $metadata = $entityManager->getClassMetadata(get_class($entity));
         $data = array();
