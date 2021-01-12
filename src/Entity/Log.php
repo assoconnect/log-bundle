@@ -100,7 +100,7 @@ abstract class Log
         return $this->entityOldValue;
     }
 
-    public abstract function getEntityId(): string;
+    abstract public function getEntityId(): string;
 
     public function getRequestTrace(): string
     {
