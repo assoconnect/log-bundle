@@ -18,7 +18,6 @@ abstract class Log
         string $entityClass,
         string $entityColumn,
         ?string $entityOldValue,
-        string $entityId,
         string $requestTrace,
         \DateTime $createdAt = null
     ) {
@@ -26,7 +25,6 @@ abstract class Log
         $this->entityClass = $entityClass;
         $this->entityColumn = $entityColumn;
         $this->entityOldValue = $entityOldValue;
-        $this->entityId = $entityId;
         $this->requestTrace = $requestTrace;
         $this->createdAt = $createdAt ?? new \DateTime();
     }
@@ -59,11 +57,6 @@ abstract class Log
      * @ORM\Column(type="text", length=65535)
      */
     protected string $requestTrace = '';
-
-    /**
-     * @ORM\Column(type="uuid_binary_ordered_time")
-     */
-    protected string $entityId;
 
     /**
      * @ORM\Column(type="string")
@@ -107,10 +100,7 @@ abstract class Log
         return $this->entityOldValue;
     }
 
-    public function getEntityId(): string
-    {
-        return $this->entityId;
-    }
+    abstract public function getEntityId(): string;
 
     public function getRequestTrace(): string
     {
