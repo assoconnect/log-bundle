@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Tests\Subscriber;
 
+use AssoConnect\LogBundle\Entity\Log;
 use AssoConnect\LogBundle\Factory\LogFactoryInterface;
 use AssoConnect\LogBundle\Serializer\LogSerializer;
 use AssoConnect\LogBundle\Subscriber\LoggerSubscriber;
@@ -43,16 +44,34 @@ class LoggerSubscriberTest extends KernelTestCase
         $em->method('getUnitOfWork')->willReturn($unitOfWork);
         $em->method('getMetadataFactory')->willReturn($cmf);
 
-        $unitOfWork->expects($this->once())->method('getScheduledEntityInsertions')->willReturn([new Author()]);
+        $logFactoy = $this->createMock(LogFactory::class);
+
+        $unitOfWork->expects($this->once())->method('getScheduledEntityInsertions')->willReturn(
+            [$createdAuthor = new Author()]
+        );
         $unitOfWork->expects($this->once())->method('getScheduledEntityUpdates')->willReturn(
             [$updatedAuthor = new Author(), new Post(new Author())]
         );
         $unitOfWork->expects($this->once())->method('getScheduledEntityDeletions')
-            ->willReturn([new Tag(), new Author()]);
+            ->willReturn([$deletedTag = new Tag(), $deletedAuthor = new Author()]);
+
+        $logFactoy->expects($this->exactly(4))->method('createLogFromEntity')->will(
+            $this->returnValueMap(
+                [
+                    [$createdAuthor, 'action.create', "[]", $this->createMock(Log::class)],
+                    [$deletedTag, 'action.delete', "[]", $this->createMock(Log::class)],
+                    [$deletedAuthor, 'action.delete', "[]", $this->createMock(Log::class)],
+                    [$updatedAuthor, 'email', "null", $this->createMock(Log::class)],
+                    [$updatedAuthor, 'registeredAt', "null", $this->createMock(Log::class)],
+                ]
+            ),
+        );
+
+
         $unitOfWork->method('getEntityChangeSet')->with($updatedAuthor)->willReturn(
             [
-                'email'         => ['test@gmail.com'],
-                'registeredAt'  => [new \DateTime('2020-10-06')],
+                'email' => ['test@gmail.com'],
+                'registeredAt' => [new \DateTime('2020-10-06')],
                 'unmappedField' => ['test']
             ]
         );
@@ -68,7 +87,7 @@ class LoggerSubscriberTest extends KernelTestCase
 
         $subscriber = new LoggerSubscriber(
             $this->createMock(LogSerializer::class),
-            new LogFactory(),
+            $logFactoy,
             ['AssoConnect\LogBundle\Tests\Functional\Entity\Author'],
             ['AssoConnect\LogBundle\Tests\Functional\Entity\Post']
         );

@@ -49,7 +49,16 @@ class LoggerSubscriber implements EventSubscriber
         //Creation
         foreach ($unitOfWork->getScheduledEntityInsertions() as $entity) {
             if ($this->isLoggeable($entity)) {
-                $logs[] = $this->factory->createLogFromEntity($entity, 'action.create');
+                $logs[] = $this->factory->createLogFromEntity(
+                    $entity,
+                    'action.create',
+                    json_encode(
+                        $this->formatter->formatEntity(
+                            $entityManager,
+                            $entity
+                        )
+                    )
+                );
             }
         }
 
@@ -63,7 +72,16 @@ class LoggerSubscriber implements EventSubscriber
         //Delete
         foreach ($unitOfWork->getScheduledEntityDeletions() as $entity) {
             if ($this->isLoggeable($entity)) {
-                $logs[] = $this->factory->createLogFromEntity($entity, 'action.delete');
+                $logs[] = $this->factory->createLogFromEntity(
+                    $entity,
+                    'action.delete',
+                    json_encode(
+                        $this->formatter->formatEntity(
+                            $entityManager,
+                            $entity
+                        )
+                    )
+                );
             }
         }
 
