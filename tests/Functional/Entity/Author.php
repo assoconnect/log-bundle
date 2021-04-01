@@ -32,6 +32,12 @@ class Author extends AbstractEntity
      */
     protected ArrayCollection $posts;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Address")
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
+     */
+    protected ?Address $address = null;
+
     public function getEmail(): ?string
     {
         return $this->email;
@@ -45,5 +51,10 @@ class Author extends AbstractEntity
     public function getRegisteredAt(): \DateTimeInterface
     {
         return $this->registeredAt;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
     }
 }
