@@ -8,6 +8,7 @@ use AssoConnect\LogBundle\Entity\Log;
 use AssoConnect\LogBundle\Factory\LogFactoryInterface;
 use AssoConnect\LogBundle\Serializer\LogSerializer;
 use AssoConnect\LogBundle\Subscriber\LoggerSubscriber;
+use AssoConnect\LogBundle\Tests\Functional\Entity\Address;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Post;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Tag;
@@ -55,14 +56,14 @@ class LoggerSubscriberTest extends KernelTestCase
         $unitOfWork->expects($this->once())->method('getScheduledEntityDeletions')
             ->willReturn([$deletedTag = new Tag(), $deletedAuthor = new Author()]);
 
-        $logFactoy->expects($this->exactly(4))->method('createLogFromEntity')->will(
+        $logFactoy->expects($this->exactly(5))->method('createLogFromEntity')->will(
             $this->returnValueMap(
                 [
                     [$createdAuthor, 'action.create', "[]", $this->createMock(Log::class)],
-                    [$deletedTag, 'action.delete', "[]", $this->createMock(Log::class)],
                     [$deletedAuthor, 'action.delete', "[]", $this->createMock(Log::class)],
                     [$updatedAuthor, 'email', "null", $this->createMock(Log::class)],
                     [$updatedAuthor, 'registeredAt', "null", $this->createMock(Log::class)],
+                    [$updatedAuthor, 'address', "null", $this->createMock(Log::class)],
                 ]
             ),
         );
@@ -72,18 +73,20 @@ class LoggerSubscriberTest extends KernelTestCase
             [
                 'email' => ['test@gmail.com'],
                 'registeredAt' => [new \DateTime('2020-10-06')],
-                'unmappedField' => ['test']
+                'unmappedField' => ['test'],
+                'address' => [new Address()]
             ]
         );
         $em->method('getClassMetadata')->with(get_class($updatedAuthor))->willReturn(
             $classMetaData = $this->createMock(ClassMetadata::class)
         );
         $classMetaData->expects($this->once())->method('getFieldNames')->willReturn(['email', 'registeredAt']);
+        $classMetaData->expects($this->once())->method('getAssociationNames')->willReturn(['address']);
 
-        $em->expects($this->exactly(4))->method('persist');
-        $cmf->expects($this->exactly(4))->method('getMetadataFor')
+        $em->expects($this->exactly(5))->method('persist');
+        $cmf->expects($this->exactly(5))->method('getMetadataFor')
             ->willReturn($this->createMock(ClassMetadata::class));
-        $unitOfWork->expects($this->exactly(4))->method('computeChangeSet');
+        $unitOfWork->expects($this->exactly(5))->method('computeChangeSet');
 
         $subscriber = new LoggerSubscriber(
             $this->createMock(LogSerializer::class),

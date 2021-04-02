@@ -39,6 +39,7 @@ class LogSerializerTest extends KernelTestCase
                 [
                     'email'        => $author->getEmail(),
                     'registeredAt' => $author->getRegisteredAt()->format(\DateTime::ISO8601),
+                    'address'      => $author->getAddress(),
                 ]
             ),
             $formatter->formatEntity($entityManager, $author)

@@ -119,7 +119,10 @@ class LoggerSubscriber implements EventSubscriber
 
         $unitOfWork = $entityManager->getUnitOfWork();
 
-        $fields = $entityManager->getClassMetadata(get_class($entity))->getFieldNames();
+        $metadata = $entityManager->getClassMetadata(get_class($entity));
+
+        $fields = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames() ?? []);
+
         foreach ($unitOfWork->getEntityChangeSet($entity) as $field => $changeSet) {
             // We keep only mapped fields
             if (false === in_array($field, $fields)) {
