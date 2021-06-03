@@ -1,6 +1,6 @@
 # AssoConnectLogBundle
 
-[![Build Status](https://travis-ci.org/assoconnect/log-bundle.svg?branch=master)](https://travis-ci.org/assoconnect/log-bundle)
+[![Build Status](https://github.com/assoconnect/log-bundle/actions/workflows/build.yml/badge.svg)](https://github.com/assoconnect/log-bundle/actions/workflows/build.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=assoconnect_log-bundle&metric=alert_status)](https://sonarcloud.io/dashboard?id=assoconnect_log-bundle)
 
 
