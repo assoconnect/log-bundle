@@ -118,6 +118,7 @@ class LogSerializerTest extends KernelTestCase
         $provider[] = [1, 1];
         $provider[] = [1.5, 1.5];
         $provider[] = [new \DateTime('@1529500134'), '2018-06-20T13:08:54+0000'];
+        $provider[] = [new \DateTimeZone('Europe/Paris'), 'Europe/Paris'];
         $provider[] = [Money::EUR(100), '100 EUR'];
         $provider[] = [new Currency('EUR'), 'EUR'];
 
