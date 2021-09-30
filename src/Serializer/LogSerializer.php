@@ -115,6 +115,9 @@ class LogSerializer
         if ($value instanceof \DateTime) {
             return $value->format(\DateTime::ISO8601);
         }
+        if ($value instanceof \DateTimeZone) {
+            return $value->getName();
+        }
 
         if ($value instanceof Collection) {
             $values = $value->toArray();
