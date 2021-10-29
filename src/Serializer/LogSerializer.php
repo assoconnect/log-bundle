@@ -112,7 +112,7 @@ class LogSerializer
             return $value->getId();
         }
 
-        if ($value instanceof \DateTime) {
+        if ($value instanceof \DateTime || $value instanceof \DateTimeImmutable) {
             return $value->format(\DateTime::ISO8601);
         }
         if ($value instanceof \DateTimeZone) {
