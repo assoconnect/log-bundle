@@ -52,11 +52,9 @@ class LoggerSubscriber implements EventSubscriber
                 $logs[] = $this->factory->createLogFromEntity(
                     $entity,
                     'action.create',
-                    json_encode(
-                        $this->formatter->formatEntity(
-                            $entityManager,
-                            $entity
-                        )
+                    $this->formatter->formatEntity(
+                        $entityManager,
+                        $entity
                     )
                 );
             }
@@ -75,11 +73,9 @@ class LoggerSubscriber implements EventSubscriber
                 $logs[] = $this->factory->createLogFromEntity(
                     $entity,
                     'action.delete',
-                    json_encode(
-                        $this->formatter->formatEntity(
-                            $entityManager,
-                            $entity
-                        )
+                    $this->formatter->formatEntity(
+                        $entityManager,
+                        $entity
                     )
                 );
             }
@@ -132,7 +128,7 @@ class LoggerSubscriber implements EventSubscriber
             $logs[] = $this->factory->createLogFromEntity(
                 $entity,
                 $field,
-                json_encode($this->formatter->formatValue($changeSet[0]))
+                $this->formatter->formatValueAsString($changeSet[0])
             );
         }
 
