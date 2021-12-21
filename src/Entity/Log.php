@@ -82,7 +82,7 @@ abstract class Log
 
     public function getId(): string
     {
-        return $this->id->__toString();
+        return $this->id->toString();
     }
 
     public function getEntityClass(): string

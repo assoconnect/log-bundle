@@ -26,7 +26,7 @@ class LoggerSubscriberTest extends KernelTestCase
 {
     public function testEventSubscription()
     {
-        $this->assertSame(
+        self::assertSame(
             [Events::onFlush],
             (new LoggerSubscriber(
                 $this->createMock(LogSerializer::class),
@@ -47,17 +47,17 @@ class LoggerSubscriberTest extends KernelTestCase
 
         $logFactoy = $this->createMock(LogFactory::class);
 
-        $unitOfWork->expects($this->once())->method('getScheduledEntityInsertions')->willReturn(
+        $unitOfWork->expects(self::once())->method('getScheduledEntityInsertions')->willReturn(
             [$createdAuthor = new Author()]
         );
-        $unitOfWork->expects($this->once())->method('getScheduledEntityUpdates')->willReturn(
+        $unitOfWork->expects(self::once())->method('getScheduledEntityUpdates')->willReturn(
             [$updatedAuthor = new Author(), new Post(new Author())]
         );
-        $unitOfWork->expects($this->once())->method('getScheduledEntityDeletions')
-            ->willReturn([$deletedTag = new Tag(), $deletedAuthor = new Author()]);
+        $unitOfWork->expects(self::once())->method('getScheduledEntityDeletions')
+            ->willReturn([new Tag(), $deletedAuthor = new Author()]);
 
-        $logFactoy->expects($this->exactly(5))->method('createLogFromEntity')->will(
-            $this->returnValueMap(
+        $logFactoy->expects(self::exactly(5))->method('createLogFromEntity')->will(
+            self::returnValueMap(
                 [
                     [$createdAuthor, 'action.create', "[]", $this->createMock(Log::class)],
                     [$deletedAuthor, 'action.delete', "[]", $this->createMock(Log::class)],
@@ -80,13 +80,13 @@ class LoggerSubscriberTest extends KernelTestCase
         $em->method('getClassMetadata')->with(get_class($updatedAuthor))->willReturn(
             $classMetaData = $this->createMock(ClassMetadata::class)
         );
-        $classMetaData->expects($this->once())->method('getFieldNames')->willReturn(['email', 'registeredAt']);
-        $classMetaData->expects($this->once())->method('getAssociationNames')->willReturn(['address']);
+        $classMetaData->expects(self::once())->method('getFieldNames')->willReturn(['email', 'registeredAt']);
+        $classMetaData->expects(self::once())->method('getAssociationNames')->willReturn(['address']);
 
-        $em->expects($this->exactly(5))->method('persist');
-        $cmf->expects($this->exactly(5))->method('getMetadataFor')
+        $em->expects(self::exactly(5))->method('persist');
+        $cmf->expects(self::exactly(5))->method('getMetadataFor')
             ->willReturn($this->createMock(ClassMetadata::class));
-        $unitOfWork->expects($this->exactly(5))->method('computeChangeSet');
+        $unitOfWork->expects(self::exactly(5))->method('computeChangeSet');
 
         $subscriber = new LoggerSubscriber(
             $this->createMock(LogSerializer::class),

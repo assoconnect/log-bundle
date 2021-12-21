@@ -82,14 +82,11 @@ class LogSerializer
             case 'string':
                 // Scalar so no need to format it
                 return $value;
-                break;
             case 'object':
                 return $this->formatObject($value);
-                break;
             case 'array':
                 // Recursive call on each iterable item
                 return array_map(__METHOD__, $value);
-                break;
             default:
                 throw new \DomainException('Unhandled type');
         }

@@ -6,5 +6,4 @@ namespace AssoConnect\LogBundle\Tests\Functional\Entity;
 
 class ObjectWithoutId
 {
-
 }
