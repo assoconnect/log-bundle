@@ -99,7 +99,7 @@ class LoggerSubscriber implements EventSubscriber
             return false;
         }
 
-        return empty($this->includedEntities) || $this->isSubClassFromList($entity, $this->includedEntities);
+        return [] === $this->includedEntities || $this->isSubClassFromList($entity, $this->includedEntities);
     }
 
     private function isSubClassFromList($entity, array $classes): bool
@@ -121,11 +121,11 @@ class LoggerSubscriber implements EventSubscriber
 
         $metadata = $entityManager->getClassMetadata(get_class($entity));
 
-        $fields = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames() ?? []);
+        $fields = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames());
 
         foreach ($unitOfWork->getEntityChangeSet($entity) as $field => $changeSet) {
             // We keep only mapped fields
-            if (false === in_array($field, $fields)) {
+            if (false === in_array($field, $fields, true)) {
                 continue;
             }
 

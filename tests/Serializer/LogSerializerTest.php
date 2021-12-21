@@ -30,10 +30,10 @@ class LogSerializerTest extends KernelTestCase
         $post = new Post($author);
         $post->addTag($tag);
 
-        $entityManager = self::$container->get(EntityManagerInterface::class);
+        $entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
-        $formatter = self::$container->get(LogSerializer::class);
-        $this->assertSame(
+        $formatter = self::getContainer()->get(LogSerializer::class);
+        self::assertSame(
             array_merge(
                 $this->helperFormatEntity($author),
                 [
@@ -45,8 +45,8 @@ class LogSerializerTest extends KernelTestCase
             $formatter->formatEntity($entityManager, $author)
         );
 
-        $this->assertSame($this->helperFormatEntity($tag), $formatter->formatEntity($entityManager, $tag));
-        $this->assertSame(
+        self::assertSame($this->helperFormatEntity($tag), $formatter->formatEntity($entityManager, $tag));
+        self::assertSame(
             array_merge(
                 $this->helperFormatEntity($post),
                 [
@@ -73,7 +73,7 @@ class LogSerializerTest extends KernelTestCase
     public function testFormatField(AbstractEntity $entity, string $field, $value)
     {
         $formatter = new LogSerializer();
-        $this->assertSame($value, $formatter->formatField($entity, $field));
+        self::assertSame($value, $formatter->formatField($entity, $field));
     }
 
     public function providerFormatField()
@@ -96,7 +96,7 @@ class LogSerializerTest extends KernelTestCase
     public function testFormatValue($value, $formatted)
     {
         $formatter = new LogSerializer();
-        $this->assertSame($formatted, $formatter->formatValue($value));
+        self::assertSame($formatted, $formatter->formatValue($value));
     }
 
     public function testFormatValueDomainException()
@@ -122,7 +122,7 @@ class LogSerializerTest extends KernelTestCase
         $provider[] = [Money::EUR(100), '100 EUR'];
         $provider[] = [new Currency('EUR'), 'EUR'];
 
-        $entity = new Author('email@gmail.com');
+        $entity = new Author();
         $provider[] = [$entity, $entity->getId()];
 
         // Array

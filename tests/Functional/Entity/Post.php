@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Post extends AbstractEntity
 {
-
     public function __construct(
         Author $author
     ) {

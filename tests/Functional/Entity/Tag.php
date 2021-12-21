@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Tag extends AbstractEntity
 {
-
     public function __construct()
     {
         parent::__construct();
