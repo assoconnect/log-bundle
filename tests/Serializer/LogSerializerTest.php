@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Tests\Serializer;
 
+use AssoConnect\LogBundle\Exception\UnsupportObjectException;
 use AssoConnect\LogBundle\Serializer\LogSerializer;
 use AssoConnect\LogBundle\Tests\Functional\Entity\AbstractEntity;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
@@ -18,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase as KernelTestCase;
 
 class LogSerializerTest extends KernelTestCase
 {
-    public function testFormatEntity()
+    public function testFormatEntity(): void
     {
         self::bootKernel();
 
@@ -30,30 +31,35 @@ class LogSerializerTest extends KernelTestCase
         $post = new Post($author);
         $post->addTag($tag);
 
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
+        /** @var LogSerializer $formatter */
         $formatter = self::getContainer()->get(LogSerializer::class);
         self::assertSame(
-            array_merge(
+            json_encode(array_merge(
                 $this->helperFormatEntity($author),
                 [
                     'email'        => $author->getEmail(),
-                    'registeredAt' => $author->getRegisteredAt()->format(\DateTime::ISO8601),
+                    'registeredAt' => $author->getRegisteredAt()->format(\DateTimeInterface::ISO8601),
                     'address'      => $author->getAddress(),
                 ]
-            ),
+            ), JSON_PRETTY_PRINT),
             $formatter->formatEntity($entityManager, $author)
         );
 
-        self::assertSame($this->helperFormatEntity($tag), $formatter->formatEntity($entityManager, $tag));
         self::assertSame(
-            array_merge(
+            json_encode($this->helperFormatEntity($tag), JSON_PRETTY_PRINT),
+            $formatter->formatEntity($entityManager, $tag)
+        );
+        self::assertSame(
+            json_encode(array_merge(
                 $this->helperFormatEntity($post),
                 [
                     'author' => $author->getId(),
                     'tags'   => [$tag->getId()],
                 ]
-            ),
+            ), JSON_PRETTY_PRINT),
             $formatter->formatEntity($entityManager, $post)
         );
     }
@@ -62,79 +68,65 @@ class LogSerializerTest extends KernelTestCase
     {
         return [
             'id'        => $entity->getId(),
-            'createdAt' => $entity->getCreatedAt()->format(\DateTime::ISO8601),
-            'updatedAt' => $entity->getUpdatedAt()->format(\DateTime::ISO8601),
+            'createdAt' => $entity->getCreatedAt()->format(\DateTimeInterface::ISO8601),
+            'updatedAt' => $entity->getUpdatedAt()->format(\DateTimeInterface::ISO8601),
         ];
     }
 
     /**
-     * @dataProvider providerFormatField
+     * @dataProvider providerFormatValueAsString
      */
-    public function testFormatField(AbstractEntity $entity, string $field, $value)
+    public function testFormatValueAsStringWorks($value, $formatted): void
     {
         $formatter = new LogSerializer();
-        self::assertSame($value, $formatter->formatField($entity, $field));
+        self::assertSame($formatted, $formatter->formatValueAsString($value));
     }
 
-    public function providerFormatField()
+    public function providerFormatValueAsString(): iterable
     {
-        $author = new Author();
-        $author->setEmail('email@gmail.com');
+        yield [null, 'null'];
+        yield [[null], '[null]'];
 
-        $entity = new Post($author);
+        yield [true, 'true'];
+        yield [[true], '[true]'];
 
-        $provider = [];
-        $provider[] = [$entity, 'id', $entity->getId()];
-        $provider[] = [$entity, 'author.email', $author->getEmail()];
+        yield ['foo', '"foo"'];
+        yield [['foo'], '["foo"]'];
 
-        return $provider;
-    }
+        yield [1, '1'];
+        yield [[1], '[1]'];
 
-    /**
-     * @dataProvider providerFormatValue
-     */
-    public function testFormatValue($value, $formatted)
-    {
-        $formatter = new LogSerializer();
-        self::assertSame($formatted, $formatter->formatValue($value));
-    }
+        yield [1.5, '1.5'];
+        yield [[1.5], '[1.5]'];
 
-    public function testFormatValueDomainException()
-    {
-        $formatter = new LogSerializer();
+        yield [new \DateTime('@1529500134'), '"2018-06-20T13:08:54+0000"'];
+        yield [[new \DateTime('@1529500134')], '["2018-06-20T13:08:54+0000"]'];
 
-        $this->expectException(\DomainException::class);
+        yield [new \DateTimeZone('Europe/Paris'), '"Europe\/Paris"'];
+        yield [[new \DateTimeZone('Europe/Paris')], '["Europe\/Paris"]'];
 
-        $formatter->formatValue(new ObjectWithoutId());
-    }
+        yield [Money::EUR(100), '"100 EUR"'];
+        yield [[Money::EUR(100)], '["100 EUR"]'];
 
-    public function providerFormatValue()
-    {
-        $provider = [];
-
-        $provider[] = [null, null];
-        $provider[] = [true, true];
-        $provider[] = ['foo', 'foo'];
-        $provider[] = [1, 1];
-        $provider[] = [1.5, 1.5];
-        $provider[] = [new \DateTime('@1529500134'), '2018-06-20T13:08:54+0000'];
-        $provider[] = [new \DateTimeZone('Europe/Paris'), 'Europe/Paris'];
-        $provider[] = [Money::EUR(100), '100 EUR'];
-        $provider[] = [new Currency('EUR'), 'EUR'];
+        yield [new Currency('EUR'), '"EUR"'];
+        yield [[new Currency('EUR')], '["EUR"]'];
 
         $entity = new Author();
-        $provider[] = [$entity, $entity->getId()];
-
-        // Array
-        foreach ($provider as $set) {
-            $provider[] = [[$set[0]], [$set[1]]];
-        }
+        yield [$entity, (string) $entity->getId()];
+        yield [[$entity], '[' . $entity->getId() . ']'];
 
         // Doctrine collection
         $collection = new ArrayCollection();
         $collection->add($entity);
-        $provider[] = [$collection, [$entity->getId()]];
+        yield [$collection, '[' . $entity->getId() . ']'];
+    }
 
-        return $provider;
+    public function testUnsupportedObjectThrowsAnException(): void
+    {
+        $formatter = new LogSerializer();
+
+        $this->expectException(UnsupportObjectException::class);
+
+        $formatter->formatValueAsString(new ObjectWithoutId());
     }
 }

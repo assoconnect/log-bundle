@@ -59,15 +59,14 @@ class LoggerSubscriberTest extends KernelTestCase
         $logFactoy->expects(self::exactly(5))->method('createLogFromEntity')->will(
             self::returnValueMap(
                 [
-                    [$createdAuthor, 'action.create', "[]", $this->createMock(Log::class)],
-                    [$deletedAuthor, 'action.delete', "[]", $this->createMock(Log::class)],
-                    [$updatedAuthor, 'email', "null", $this->createMock(Log::class)],
-                    [$updatedAuthor, 'registeredAt', "null", $this->createMock(Log::class)],
-                    [$updatedAuthor, 'address', "null", $this->createMock(Log::class)],
+                    [$createdAuthor, 'action.create', '', $this->createMock(Log::class)],
+                    [$deletedAuthor, 'action.delete', '', $this->createMock(Log::class)],
+                    [$updatedAuthor, 'email', '', $this->createMock(Log::class)],
+                    [$updatedAuthor, 'registeredAt', '', $this->createMock(Log::class)],
+                    [$updatedAuthor, 'address', '', $this->createMock(Log::class)],
                 ]
             ),
         );
-
 
         $unitOfWork->method('getEntityChangeSet')->with($updatedAuthor)->willReturn(
             [
@@ -91,8 +90,8 @@ class LoggerSubscriberTest extends KernelTestCase
         $subscriber = new LoggerSubscriber(
             $this->createMock(LogSerializer::class),
             $logFactoy,
-            ['AssoConnect\LogBundle\Tests\Functional\Entity\Author'],
-            ['AssoConnect\LogBundle\Tests\Functional\Entity\Post']
+            [Author::class],
+            [Post::class]
         );
 
         $event = new OnFlushEventArgs($em);

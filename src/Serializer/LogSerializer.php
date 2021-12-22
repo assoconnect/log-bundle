@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Serializer;
 
+use AssoConnect\LogBundle\Exception\UnsupportObjectException;
 use AssoConnect\PHPDate\AbsoluteDate;
 use AssoConnect\PHPPercent\Percent;
 use Doctrine\Common\Collections\Collection;
@@ -25,7 +26,7 @@ class LogSerializer
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
 
-    public function formatEntity(EntityManagerInterface $entityManager, object $entity): array
+    public function formatEntity(EntityManagerInterface $entityManager, object $entity): string
     {
         $metadata = $entityManager->getClassMetadata(get_class($entity));
         $data = array();
@@ -48,31 +49,31 @@ class LogSerializer
             }
         }
 
-        return $data;
+        return json_encode($data, JSON_PRETTY_PRINT);
+    }
+
+    public function formatValueAsString($value): string
+    {
+        return json_encode($this->formatValue($value));
     }
 
     /**
      * Returns a formatted value of a given entities' field
-     *
-     * @return array|string
      */
-    public function formatField(object $entity, string $field)
+    private function formatField(object $entity, string $field)
     {
         if ($this->propertyAccessor->isReadable($entity, $field)) {
             $value = $this->propertyAccessor->getValue($entity, $field);
-        } else {
-            $value = null;
+            return $this->formatValue($value);
         }
 
-        return $this->formatValue($value);
+        return null;
     }
 
     /**
-     * Returns a formatted value depending of the given value's type.
-     *
-     * @return array|string
+     * Returns a formatted value depending on the given value's type.
      */
-    public function formatValue($value)
+    private function formatValue($value)
     {
         switch (gettype($value)) {
             case 'NULL':
@@ -109,28 +110,24 @@ class LogSerializer
             return $value->getId();
         }
 
-        if ($value instanceof \DateTime || $value instanceof \DateTimeImmutable) {
-            return $value->format(\DateTime::ISO8601);
+        if ($value instanceof \DateTimeInterface) {
+            return $value->format(\DateTimeInterface::ISO8601);
         }
+
         if ($value instanceof \DateTimeZone) {
             return $value->getName();
         }
 
         if ($value instanceof Collection) {
-            $values = $value->toArray();
-            array_walk(
-                $values,
-                function (&$value) {
-                    $value = $value->getId();
-                }
-            );
-            return $values;
+            return array_map(function ($item) {
+                return $item->getId();
+            }, $value->toArray());
         }
 
         if (method_exists($value, '__toString')) {
             return $value->__toString();
         }
 
-        throw new \DomainException('Unhandled object of class ' . get_class($value));
+        throw new UnsupportObjectException($value);
     }
 }

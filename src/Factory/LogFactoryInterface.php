@@ -11,5 +11,5 @@ use AssoConnect\LogBundle\Entity\Log;
  */
 interface LogFactoryInterface
 {
-    public function createLogFromEntity(object $entity, string $entityColumn, string $oldValue = null): Log;
+    public function createLogFromEntity(object $entity, string $entityColumn, ?string $oldValue = null): Log;
 }

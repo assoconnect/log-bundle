@@ -11,7 +11,7 @@ use Ramsey\Uuid\Uuid;
 
 class LogFactory implements LogFactoryInterface
 {
-    public function createLogFromEntity(object $entity, string $entityColumn, string $oldValue = null): Log
+    public function createLogFromEntity(object $entity, string $entityColumn, ?string $oldValue = null): Log
     {
         return new FunctionalLog(
             Uuid::uuid1(),
