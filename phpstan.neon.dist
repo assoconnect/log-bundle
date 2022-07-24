@@ -3,9 +3,9 @@ parameters:
     paths:
         - src/
         - tests/
+
 includes:
-    - vendor/phpstan/phpstan-phpunit/extension.neon
-    - vendor/phpstan/phpstan-phpunit/rules.neon
-    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/assoconnect/phpstan-rules/extension.neon
+    - vendor/assoconnect/phpstan-rules/rules.neon
     - vendor/phpstan/phpstan-symfony/extension.neon
     - vendor/phpstan/phpstan-symfony/rules.neon
