@@ -14,14 +14,14 @@ class LogBundle extends Bundle
     /**
      * {@inheritdoc}
      */
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
         $container->registerForAutoconfiguration(EventSubscriber::class)
             ->addTag('doctrine.event_subscriber');
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): LogExtension
     {
         return new LogExtension();
     }
