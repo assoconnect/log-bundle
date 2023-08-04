@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace AssoConnect\LogBundle\Serializer;
 
 use AssoConnect\LogBundle\Exception\UnsupportObjectException;
-use AssoConnect\PHPDate\AbsoluteDate;
-use AssoConnect\PHPPercent\Percent;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
-use Money\Currency;
 use Money\Money;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Tests\Functional\Entity;
 
+use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,11 +18,11 @@ abstract class AbstractEntity
     public function __construct()
     {
         $this->id = rand(0, 10000000);
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return get_called_class() . ' #' . $this->getId();
     }
@@ -41,17 +43,16 @@ abstract class AbstractEntity
     /**
      * Timestamp of the entity's creation
      *
-     * @var \DateTimeInterface
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private DateTimeInterface $createdAt;
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -63,14 +64,14 @@ abstract class AbstractEntity
      *
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private \DateTimeInterface $updatedAt;
+    private DateTimeInterface $updatedAt;
 
-    public function getUpdatedAt(): \DateTimeInterface
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

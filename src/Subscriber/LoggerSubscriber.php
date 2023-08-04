@@ -34,7 +34,7 @@ class LoggerSubscriber implements EventSubscriber
         $this->excludedEntities = $excludedEntities;
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [Events::onFlush];
     }
