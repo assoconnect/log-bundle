@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AssoConnect\LogBundle\Tests\Functional\Entity;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -25,7 +28,7 @@ class Author extends AbstractEntity
     /**
      * @ORM\Column(type="date_absolute")
      */
-    protected \DateTimeInterface $registeredAt;
+    protected DateTimeInterface $registeredAt;
 
     /**
      * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
@@ -43,12 +46,12 @@ class Author extends AbstractEntity
         return $this->email;
     }
 
-    public function setEmail(string $email)
+    public function setEmail(string $email): void
     {
         $this->email = $email;
     }
 
-    public function getRegisteredAt(): \DateTimeInterface
+    public function getRegisteredAt(): DateTimeInterface
     {
         return $this->registeredAt;
     }

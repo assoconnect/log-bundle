@@ -11,7 +11,7 @@ use Ramsey\Uuid\UuidInterface;
 
 class LogTest extends TestCase
 {
-    public function testContructor()
+    public function testContructor(): void
     {
         $entity = new FunctionalLog(
             Uuid::uuid1(),
@@ -34,7 +34,7 @@ class LogTest extends TestCase
     /**
      * @dataProvider createBaseDoctrineLogDataProvider
      */
-    public function testRequestMethod(FunctionalLog $functionalLog)
+    public function testRequestMethod(FunctionalLog $functionalLog): void
     {
         $requestMethod = 'request method';
 
@@ -45,7 +45,7 @@ class LogTest extends TestCase
     /**
      * @dataProvider createBaseDoctrineLogDataProvider
      */
-    public function testRequestUrl(FunctionalLog $functionalLog)
+    public function testRequestUrl(FunctionalLog $functionalLog): void
     {
         $requestUrl = 'https://www.doctrine.org';
 
@@ -56,7 +56,7 @@ class LogTest extends TestCase
     /**
      * @dataProvider createBaseDoctrineLogDataProvider
      */
-    public function testRequestIp(FunctionalLog $functionalLog)
+    public function testRequestIp(FunctionalLog $functionalLog): void
     {
         $requestIp = '127.0.0.1';
 
@@ -64,7 +64,7 @@ class LogTest extends TestCase
         self::assertSame($requestIp, $functionalLog->getRequestIp());
     }
 
-    public function createBaseDoctrineLogDataProvider(): \Iterator
+    public function createBaseDoctrineLogDataProvider(): iterable
     {
         yield 'basic Log' => [
             new FunctionalLog(
@@ -75,7 +75,7 @@ class LogTest extends TestCase
                 'f749d691-a546-424c-842a-1728a4e96250',
                 'request trace',
                 new \DateTime()
-            )
+            ),
         ];
     }
 }

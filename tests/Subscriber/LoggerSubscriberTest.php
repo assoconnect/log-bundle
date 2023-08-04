@@ -24,7 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class LoggerSubscriberTest extends KernelTestCase
 {
-    public function testEventSubscription()
+    public function testEventSubscription(): void
     {
         self::assertSame(
             [Events::onFlush],
@@ -37,7 +37,7 @@ class LoggerSubscriberTest extends KernelTestCase
         );
     }
 
-    public function testSubscriberCorrectLogsCreation()
+    public function testSubscriberCorrectLogsCreation(): void
     {
         $em = $this->createMock(EntityManagerInterface::class);
         $unitOfWork = $this->createMock(UnitOfWork::class);
@@ -73,7 +73,7 @@ class LoggerSubscriberTest extends KernelTestCase
                 'email' => ['test@gmail.com'],
                 'registeredAt' => [new \DateTime('2020-10-06')],
                 'unmappedField' => ['test'],
-                'address' => [new Address()]
+                'address' => [new Address()],
             ]
         );
         $em->method('getClassMetadata')->with(get_class($updatedAuthor))->willReturn(

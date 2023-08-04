@@ -11,6 +11,8 @@ use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
 use AssoConnect\LogBundle\Tests\Functional\Entity\ObjectWithoutId;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Post;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Tag;
+use DateTime;
+use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Money\Currency;
@@ -31,10 +33,8 @@ class LogSerializerTest extends KernelTestCase
         $post = new Post($author);
         $post->addTag($tag);
 
-        /** @var EntityManagerInterface $entityManager */
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
 
-        /** @var LogSerializer $formatter */
         $formatter = self::getContainer()->get(LogSerializer::class);
         self::assertSame(
             json_encode(array_merge(
@@ -99,11 +99,11 @@ class LogSerializerTest extends KernelTestCase
         yield [1.5, '1.5'];
         yield [[1.5], '[1.5]'];
 
-        yield [new \DateTime('@1529500134'), '"2018-06-20T13:08:54+0000"'];
-        yield [[new \DateTime('@1529500134')], '["2018-06-20T13:08:54+0000"]'];
+        yield [new DateTime('@1529500134'), '"2018-06-20T13:08:54+0000"'];
+        yield [[new DateTime('@1529500134')], '["2018-06-20T13:08:54+0000"]'];
 
-        yield [new \DateTimeZone('Europe/Paris'), '"Europe\/Paris"'];
-        yield [[new \DateTimeZone('Europe/Paris')], '["Europe\/Paris"]'];
+        yield [new DateTimeZone('Europe/Paris'), '"Europe\/Paris"'];
+        yield [[new DateTimeZone('Europe/Paris')], '["Europe\/Paris"]'];
 
         yield [Money::EUR(100), '"100 EUR"'];
         yield [[Money::EUR(100)], '["100 EUR"]'];
