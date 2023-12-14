@@ -57,7 +57,7 @@ class LogSerializer
     /**
      * Returns a formatted value of a given entities' field
      */
-    private function formatField(object $entity, string $field)
+    private function formatField(object $entity, string $field): mixed
     {
         if ($this->propertyAccessor->isReadable($entity, $field)) {
             $value = $this->propertyAccessor->getValue($entity, $field);
@@ -70,7 +70,7 @@ class LogSerializer
     /**
      * Returns a formatted value depending on the given value's type.
      */
-    private function formatValue($value)
+    private function formatValue($value): mixed
     {
         switch (gettype($value)) {
             case 'NULL':
@@ -93,7 +93,7 @@ class LogSerializer
     /**
      * Returns a scalar representation of the object
      */
-    private function formatObject($value)
+    private function formatObject($value): mixed
     {
         if ($value instanceof Money) {
             // Required because Money does not provide a __toString() method
@@ -116,9 +116,13 @@ class LogSerializer
         }
 
         if ($value instanceof Collection) {
-            return array_map(function ($item) {
+            return array_map(static function ($item): mixed {
                 return $item->getId();
             }, $value->toArray());
+        }
+
+        if ($value instanceof \BackedEnum) {
+            return $value->value;
         }
 
         if (method_exists($value, '__toString')) {
