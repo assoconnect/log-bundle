@@ -69,7 +69,6 @@ abstract class Log
      */
     protected string $requestUrl = '';
 
-
     /**
      * @ORM\Column(type="ip")
      */

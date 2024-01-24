@@ -93,7 +93,7 @@ class LogSerializer
     /**
      * Returns a scalar representation of the object
      */
-    private function formatObject($value): mixed
+    private function formatObject(object $value): mixed
     {
         if ($value instanceof Money) {
             // Required because Money does not provide a __toString() method
@@ -116,7 +116,7 @@ class LogSerializer
         }
 
         if ($value instanceof Collection) {
-            return array_map(static function ($item): mixed {
+            return array_map(static function (object $item): mixed {
                 return $item->getId();
             }, $value->toArray());
         }
