@@ -4,32 +4,46 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Entity;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\MappedSuperclass]
 abstract class Log
 {
     public function __construct(
-        UuidInterface $id,
-        string $entityClass,
+        object $entity,
         string $entityColumn,
         ?string $entityOldValue,
         string $requestTrace,
-        \DateTime $createdAt = null
     ) {
-        $this->id = $id;
-        $this->entityClass = $entityClass;
+        $this->entityClass = $entity::class;
         $this->entityColumn = $entityColumn;
         $this->entityOldValue = $entityOldValue;
         $this->requestTrace = $requestTrace;
-        $this->createdAt = $createdAt ?? new \DateTime();
+        $this->createdAt = new DateTimeImmutable();
     }
 
-    #[ORM\Id]
-    #[ORM\Column(type: 'uuid_binary_ordered_time', unique: true)]
-    protected UuidInterface $id;
+    public function setRequestContext(RequestContext $requestContext, string $ip): static
+    {
+        $this->requestUrl = $requestContext->getScheme() . '://' .
+            $requestContext->getHost() .
+            $requestContext->getPathInfo() .
+            ('' === $requestContext->getQueryString() ? '' : '?' . $requestContext->getQueryString())
+        ;
+        $this->requestMethod = $requestContext->getMethod();
+        $this->requestIp = $ip;
+
+        return $this;
+    }
+
+    public function setSecurityUser(UserInterface $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
 
     #[Assert\NotBlank]
     #[ORM\Column]
@@ -56,13 +70,13 @@ abstract class Log
     #[ORM\Column(type: 'ip')]
     protected string $requestIp = '';
 
-    #[ORM\Column(type: 'datetime')]
-    protected \DateTime $createdAt;
+    /**
+     * This field has to be defined by the implementation to match their security user
+     */
+    protected ?UserInterface $user = null;
 
-    public function getId(): string
-    {
-        return $this->id->toString();
-    }
+    #[ORM\Column(type: 'datetime_immutable')]
+    protected DateTimeImmutable $createdAt;
 
     public function getEntityClass(): string
     {
@@ -96,35 +110,18 @@ abstract class Log
         return $this->requestUrl;
     }
 
-
     public function getRequestIp(): string
     {
         return $this->requestIp;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getUser(): ?UserInterface
+    {
+        return $this->user;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
-    }
-
-    public function setRequestMethod(string $requestMethod): self
-    {
-        $this->requestMethod = $requestMethod;
-
-        return $this;
-    }
-
-    public function setRequestUrl(string $requestUrl): self
-    {
-        $this->requestUrl = $requestUrl;
-
-        return $this;
-    }
-
-    public function setRequestIp(string $requestIp): self
-    {
-        $this->requestIp = $requestIp;
-
-        return $this;
     }
 }

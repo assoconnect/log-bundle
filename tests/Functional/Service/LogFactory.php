@@ -7,19 +7,20 @@ namespace AssoConnect\LogBundle\Tests\Functional\Service;
 use AssoConnect\LogBundle\Entity\Log;
 use AssoConnect\LogBundle\Factory\LogFactoryInterface;
 use AssoConnect\LogBundle\Tests\Functional\Entity\FunctionalLog;
-use Ramsey\Uuid\Uuid;
 
 class LogFactory implements LogFactoryInterface
 {
-    public function createLogFromEntity(object $entity, string $entityColumn, ?string $oldValue = null): Log
-    {
+    public function createLogFromEntity(
+        object $entity,
+        string $entityColumn,
+        ?string $entityOldValue,
+        string $requestTrace,
+    ): Log {
         return new FunctionalLog(
-            Uuid::uuid1(),
-            'entityClass',
+            $entity,
             $entityColumn,
-            $oldValue,
-            'entityId',
-            'requestTrace'
+            $entityOldValue,
+            $requestTrace,
         );
     }
 }

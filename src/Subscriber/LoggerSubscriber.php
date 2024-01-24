@@ -4,34 +4,25 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Subscriber;
 
+use AssoConnect\LogBundle\Factory\LogDataFactory;
 use AssoConnect\LogBundle\Factory\LogFactoryInterface;
-use AssoConnect\LogBundle\Serializer\LogSerializer;
+use AssoConnect\LogBundle\Factory\RequestContextAwareLogFactoryInterface;
+use AssoConnect\LogBundle\Factory\SecurityContextAwareLogFactoryInterface;
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 
 /**
- * This Doctrine subscriber creates a Log entity every time a fully Doctrine-managed entity is persisted,
- * updated or removed.
+ * This Doctrine subscriber creates a Log entity every time
+ * a fully Doctrine-managed entity is persisted, updated, or removed.
  */
 class LoggerSubscriber implements EventSubscriber
 {
-    private LogSerializer $formatter;
-    private LogFactoryInterface $factory;
-    private array $includedEntities;
-    private array $excludedEntities;
-
     public function __construct(
-        LogSerializer $formatter,
-        LogFactoryInterface $factory,
-        array $includedEntities,
-        array $excludedEntities
+        private readonly LogFactoryInterface $factory,
+        private readonly LogDataFactory $logDataFactory,
+        private readonly string $projectDir
     ) {
-        $this->formatter = $formatter;
-        $this->factory = $factory;
-        $this->includedEntities = $includedEntities;
-        $this->excludedEntities = $excludedEntities;
     }
 
     public function getSubscribedEvents(): array
@@ -41,97 +32,49 @@ class LoggerSubscriber implements EventSubscriber
 
     public function onFlush(OnFlushEventArgs $eventArgs): void
     {
-        $entityManager = $eventArgs->getEntityManager();
-        $unitOfWork = $entityManager->getUnitOfWork();
+        $em = $eventArgs->getEntityManager();
+        $unitOfWork = $em->getUnitOfWork();
+        $cmf = $em->getMetadataFactory();
+        $requestTrace = $this->getRequestTrace();
 
-        $logs = [];
-
-        //Creation
-        foreach ($unitOfWork->getScheduledEntityInsertions() as $entity) {
-            if ($this->isLoggeable($entity)) {
-                $logs[] = $this->factory->createLogFromEntity(
-                    $entity,
-                    'action.create',
-                    $this->formatter->formatEntity(
-                        $entityManager,
-                        $entity
-                    )
-                );
-            }
-        }
-
-        //Update
-        foreach ($unitOfWork->getScheduledEntityUpdates() as $entity) {
-            if ($this->isLoggeable($entity)) {
-                $logs = array_merge($logs, $this->getLogsForEntityFields($entity, $entityManager));
-            }
-        }
-
-        //Delete
-        foreach ($unitOfWork->getScheduledEntityDeletions() as $entity) {
-            if ($this->isLoggeable($entity)) {
-                $logs[] = $this->factory->createLogFromEntity(
-                    $entity,
-                    'action.delete',
-                    $this->formatter->formatEntity(
-                        $entityManager,
-                        $entity
-                    )
-                );
-            }
-        }
-
-        $cmf = $entityManager->getMetadataFactory();
-
-        foreach ($logs as $log) {
-            $entityManager->persist($log);
-            $unitOfWork->computeChangeSet($cmf->getMetadataFor(get_class($log)), $log);
-        }
-    }
-
-    private function isLoggeable($entity): bool
-    {
-        if ($this->isSubClassFromList($entity, $this->excludedEntities)) {
-            return false;
-        }
-
-        return [] === $this->includedEntities || $this->isSubClassFromList($entity, $this->includedEntities);
-    }
-
-    private function isSubClassFromList($entity, array $classes): bool
-    {
-        foreach ($classes as $class) {
-            if (is_a($entity, $class)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function getLogsForEntityFields($entity, EntityManagerInterface $entityManager): array
-    {
-        $logs = [];
-
-        $unitOfWork = $entityManager->getUnitOfWork();
-
-        $metadata = $entityManager->getClassMetadata(get_class($entity));
-
-        $fields = array_merge($metadata->getFieldNames(), $metadata->getAssociationNames());
-
-        foreach ($unitOfWork->getEntityChangeSet($entity) as $field => $changeSet) {
-            // We keep only mapped fields
-            if (false === in_array($field, $fields, true)) {
-                continue;
-            }
-
-            $logs[] = $this->factory->createLogFromEntity(
-                $entity,
-                $field,
-                $this->formatter->formatValueAsString($changeSet[0])
+        foreach ($this->logDataFactory->createFromEvent($eventArgs) as $logData) {
+            $log = $this->factory->createLogFromEntity(
+                $logData['entity'],
+                $logData['entityColumn'],
+                $logData['entityOldValue'],
+                $requestTrace
             );
+            if ($this->factory instanceof RequestContextAwareLogFactoryInterface) {
+                $this->factory->setRequestContext($log);
+            }
+            if ($this->factory instanceof SecurityContextAwareLogFactoryInterface) {
+                $this->factory->setSecurityUser($log);
+            }
+            $em->persist($log);
+            $unitOfWork->computeChangeSet($cmf->getMetadataFor($log::class), $log);
+        }
+    }
+
+    private function getRequestTrace(): string
+    {
+        // Request trace
+        $traces = [];
+        // adding Http refere to the trace
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $traces[] = 'HTTP Referer: ' . $_SERVER['HTTP_REFERER'] . PHP_EOL;
         }
 
-        return $logs;
+        $projectDirLength = strlen($this->projectDir);
+        /** @phpstan-ignore-next-line debug_backtrace() is banned */
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $trace) {
+            $file = $trace['file'] ?? '';
+            if (str_starts_with($file, $this->projectDir)) {
+                $file = substr($file, $projectDirLength);
+            }
+            $line = $trace['line'] ?? 0;
+            $traces[] = $file . '::' . $trace['function'] . ':' . $line;
+        }
+
+        return implode(PHP_EOL, $traces);
     }
 }

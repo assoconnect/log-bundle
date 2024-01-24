@@ -3,6 +3,10 @@ parameters:
     paths:
         - src/
         - tests/
+    exceptions:
+        uncheckedExceptionClasses:
+            - 'Doctrine\Persistence\Mapping\MappingException'
+            - 'ReflectionException'
 
 includes:
     - vendor/assoconnect/php-quality-config/phpstan.extension.neon

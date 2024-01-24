@@ -4,78 +4,43 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Tests\Entity;
 
+use AssoConnect\LogBundle\Tests\Functional\Entity\Address;
 use AssoConnect\LogBundle\Tests\Functional\Entity\FunctionalLog;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class LogTest extends TestCase
 {
-    public function testContructor(): void
+    public function testContructorAndMethods(): void
     {
         $entity = new FunctionalLog(
-            Uuid::uuid1(),
-            $entityClass = 'entityClass',
+            $address = new Address(),
             $entityColumn = 'entityColumn',
             $entityOldValue = 'oldValue',
-            $entityId = 'f749d691-a546-424c-842a-1728a4e96250',
             $requestTrace = 'request trace',
-            $date = new \DateTime()
         );
-        self::assertNotEmpty($entity->getId());
-        self::assertSame($entityClass, $entity->getEntityClass());
+        self::assertSame(Address::class, $entity->getEntityClass());
         self::assertSame($entityColumn, $entity->getEntityColumn());
         self::assertSame($entityOldValue, $entity->getEntityOldValue());
-        self::assertSame($entityId, $entity->getEntityId());
+        self::assertSame((string) $address->getId(), $entity->getEntityId());
         self::assertSame($requestTrace, $entity->getRequestTrace());
-        self::assertSame($date, $entity->getCreatedAt());
-    }
 
-    /**
-     * @dataProvider createBaseDoctrineLogDataProvider
-     */
-    public function testRequestMethod(FunctionalLog $functionalLog): void
-    {
-        $requestMethod = 'request method';
-
-        $functionalLog->setRequestMethod($requestMethod);
-        self::assertSame($requestMethod, $functionalLog->getRequestMethod());
-    }
-
-    /**
-     * @dataProvider createBaseDoctrineLogDataProvider
-     */
-    public function testRequestUrl(FunctionalLog $functionalLog): void
-    {
-        $requestUrl = 'https://www.doctrine.org';
-
-        $functionalLog->setRequestUrl($requestUrl);
-        self::assertSame($requestUrl, $functionalLog->getRequestUrl());
-    }
-
-    /**
-     * @dataProvider createBaseDoctrineLogDataProvider
-     */
-    public function testRequestIp(FunctionalLog $functionalLog): void
-    {
-        $requestIp = '127.0.0.1';
-
-        $functionalLog->setRequestIp($requestIp);
-        self::assertSame($requestIp, $functionalLog->getRequestIp());
-    }
-
-    public function createBaseDoctrineLogDataProvider(): iterable
-    {
-        yield 'basic Log' => [
-            new FunctionalLog(
-                $this->createMock(UuidInterface::class),
-                'entityClass',
-                'entityColumn',
-                'oldValue',
-                'f749d691-a546-424c-842a-1728a4e96250',
-                'request trace',
-                new \DateTime()
+        $entity->setRequestContext(
+            new RequestContext(
+                method: $method = 'GET',
+                scheme: 'https',
+                host: 'mydomain.com',
+                path: '/hello',
+                queryString: 'foo=bar'
             ),
-        ];
+            $ip = '127.0.0.1',
+        );
+        self::assertSame($method, $entity->getRequestMethod());
+        self::assertSame('https://mydomain.com/hello?foo=bar', $entity->getRequestUrl());
+        self::assertSame($ip, $entity->getRequestIp());
+
+        $entity->setSecurityUser($user = $this->createMock(UserInterface::class));
+        self::assertSame($user, $entity->getUser());
     }
 }
