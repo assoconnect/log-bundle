@@ -8,9 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\MappedSuperclass
- */
+#[ORM\MappedSuperclass]
 abstract class Log
 {
     public function __construct(
@@ -29,54 +27,36 @@ abstract class Log
         $this->createdAt = $createdAt ?? new \DateTime();
     }
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="uuid_binary_ordered_time", unique=true)
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid_binary_ordered_time', unique: true)]
     protected UuidInterface $id;
 
-    /**
-     * @Assert\NotBlank()
-     * @ORM\Column(type="string")
-     */
+    #[Assert\NotBlank]
+    #[ORM\Column]
     protected string $entityClass = '';
 
-    /**
-     * @Assert\NotBlank()
-     * @ORM\Column(type="string")
-     */
+    #[Assert\NotBlank]
+    #[ORM\Column]
     protected string $entityColumn = '';
 
-    /**
-     * @ORM\Column(type="text", length=65535, nullable=true)
-     */
+    #[ORM\Column(type: 'text', length: 65535, nullable: true)]
     protected ?string $entityOldValue = null;
 
-    /**
-     * @Assert\NotBlank()
-     * @ORM\Column(type="text", length=65535)
-     */
+    #[Assert\NotBlank]
+    #[ORM\Column(type: 'text', length: 65535)]
     protected string $requestTrace = '';
 
-    /**
-     * @ORM\Column(type="string")
-     */
+    #[ORM\Column]
     protected string $requestMethod = '';
 
-    /**
-     * @ORM\Column(type="text", length=65535)
-     * @Assert\Url()
-     */
+    #[Assert\Url]
+    #[ORM\Column(type: 'text', length: 65535)]
     protected string $requestUrl = '';
 
-    /**
-     * @ORM\Column(type="ip")
-     */
+    #[ORM\Column(type: 'ip')]
     protected string $requestIp = '';
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     protected \DateTime $createdAt;
 
     public function getId(): string

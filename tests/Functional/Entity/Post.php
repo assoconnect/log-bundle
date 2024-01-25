@@ -9,9 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class Post extends AbstractEntity
 {
     public function __construct(
@@ -22,14 +20,10 @@ class Post extends AbstractEntity
         $this->tags = new ArrayCollection();
     }
 
-    /**
-     * @Assert\NotBlank()
-     */
+    #[Assert\NotBlank]
     protected $title;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Author", inversedBy="posts")
-     */
+    #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'posts')]
     protected Author $author;
 
     public function getAuthor(): Author
@@ -37,9 +31,7 @@ class Post extends AbstractEntity
         return $this->author;
     }
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="posts")
-     */
+    #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'posts')]
     protected ArrayCollection $tags;
 
     public function getTags(): Collection

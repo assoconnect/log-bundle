@@ -24,14 +24,9 @@ class FunctionalLog extends Log
         parent::__construct($id, $entityClass, $entityColumn, $entityOldValue, $requestTrace, $createdAt);
     }
 
-    /**
-     * @ORM\Column(type="uuid_binary_ordered_time")
-     */
+    #[ORM\Column(type: 'uuid_binary_ordered_time')]
     protected string $entityId;
 
-    /**
-     * @return string
-     */
     public function getEntityId(): string
     {
         return $this->entityId;

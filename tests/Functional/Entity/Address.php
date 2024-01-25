@@ -6,9 +6,7 @@ namespace AssoConnect\LogBundle\Tests\Functional\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class Address extends AbstractEntity
 {
     private ?string $streetName = null;
