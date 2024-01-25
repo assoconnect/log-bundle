@@ -8,9 +8,7 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\MappedSuperclass
- */
+#[ORM\MappedSuperclass]
 abstract class AbstractEntity
 {
     public const LIMIT = 10;
@@ -27,12 +25,9 @@ abstract class AbstractEntity
         return get_called_class() . ' #' . $this->getId();
     }
 
-    /**
-     * Unique ID of the entity
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", unique=true)
-     */
+    /** Unique ID of the entity*/
+    #[ORM\Id]
+    #[ORM\Column(unique: true)]
     private int $id;
 
     public function getId(): int
@@ -40,11 +35,8 @@ abstract class AbstractEntity
         return $this->id;
     }
 
-    /**
-     * Timestamp of the entity's creation
-     *
-     * @ORM\Column(type="datetime")
-     */
+    /** Timestamp of the entity's creation */
+    #[ORM\Column(type: 'datetime')]
     private DateTimeInterface $createdAt;
 
     public function getCreatedAt(): DateTimeInterface
@@ -59,11 +51,8 @@ abstract class AbstractEntity
         return $this;
     }
 
-    /**
-     * Timestamp of the entity's last upate
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    /** Timestamp of the entity's last upate */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private DateTimeInterface $updatedAt;
 
     public function getUpdatedAt(): DateTimeInterface

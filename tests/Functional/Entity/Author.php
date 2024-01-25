@@ -8,9 +8,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class Author extends AbstractEntity
 {
     public function __construct()
@@ -20,25 +18,17 @@ class Author extends AbstractEntity
         $this->posts = new ArrayCollection();
     }
 
-    /**
-     * @ORM\Column(type="email")
-     */
+    #[ORM\Column(type: 'email')]
     protected ?string $email = null;
 
-    /**
-     * @ORM\Column(type="date_absolute")
-     */
+    #[ORM\Column(type: 'date_absolute')]
     protected DateTimeInterface $registeredAt;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Post", mappedBy="author")
-     */
+    #[ORM\OneToMany('author', Post::class)]
     protected ArrayCollection $posts;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Address")
-     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
-     */
+    #[ORM\OneToOne(targetEntity: Address::class)]
+    #[ORM\JoinColumn(referencedColumnName: 'id', nullable: true)]
     protected ?Address $address = null;
 
     public function getEmail(): ?string
