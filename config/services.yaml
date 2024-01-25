@@ -13,6 +13,7 @@ services:
 
 
   AssoConnect\LogBundle\Subscriber\LoggerSubscriber:
+    public: true
     arguments:
       $includedEntities: []
       $excludedEntities: []

@@ -31,17 +31,17 @@
         }
     },
     "require-dev": {
-        "symfony/yaml": "^5.0",
-        "symfony/validator": "^5.0",
+        "symfony/yaml": "^5.0|^6.0",
+        "symfony/validator": "^5.0|^6.0",
         "phpstan/phpstan-symfony": "^1.0",
         "assoconnect/php-quality-config": "^1.2"
     },
     "require": {
         "php": "^8.2",
-        "symfony/framework-bundle": "^5.0",
+        "symfony/framework-bundle": "^5.0|^6.0",
         "doctrine/dbal": "^2.10|^3.0",
-        "symfony/serializer": "^5.1",
-        "symfony/property-access": "^5.1",
+        "symfony/serializer": "^5.1|^6.0",
+        "symfony/property-access": "^5.1|^6.0",
         "doctrine/doctrine-bundle": "^1.9|^2.0",
         "doctrine/orm": "^2.7",
         "moneyphp/money": "^3.0|^4.0",
