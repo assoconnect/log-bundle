@@ -11,7 +11,7 @@ composer require assoconnect/log-bundle
 
 ## Description
 
-This Symfony4 bundle provides a system creating a Log entity every time a fully Doctrine-managed entity is persisted, updated or removed.
+This Symfony5 bundle provides a system creating a Log entity every time a fully Doctrine-managed entity is persisted, updated or removed.
 
 The Log entity and the LogFactoryInterface have to be implemented.
 
