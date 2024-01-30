@@ -11,8 +11,11 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     resource: '../src/*'
 
-
-  AssoConnect\LogBundle\Subscriber\LoggerSubscriber:
+  AssoConnect\LogBundle\Factory\LogDataFactory:
     arguments:
       $includedEntities: []
       $excludedEntities: []
+
+  AssoConnect\LogBundle\Subscriber\LoggerSubscriber:
+    arguments:
+      $projectDir: '%kernel.project_dir%'

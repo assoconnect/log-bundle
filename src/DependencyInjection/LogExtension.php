@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\DependencyInjection;
 
-use AssoConnect\LogBundle\Subscriber\LoggerSubscriber;
+use AssoConnect\LogBundle\Factory\LogDataFactory;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -21,7 +21,7 @@ class LogExtension extends Extension
 
         $config = $this->processConfiguration($configuration, $configs);
 
-        $definition = $container->getDefinition(LoggerSubscriber::class);
+        $definition = $container->getDefinition(LogDataFactory::class);
         $definition->replaceArgument('$includedEntities', $config['log_filters']['includedEntities']);
         $definition->replaceArgument('$excludedEntities', $config['log_filters']['excludedEntities']);
     }

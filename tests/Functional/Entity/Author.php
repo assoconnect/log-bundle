@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AssoConnect\LogBundle\Tests\Functional\Entity;
 
 use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -15,7 +14,6 @@ class Author extends AbstractEntity
     {
         parent::__construct();
         $this->registeredAt = new \DateTime();
-        $this->posts = new ArrayCollection();
     }
 
     #[ORM\Column(type: 'email')]
@@ -23,9 +21,6 @@ class Author extends AbstractEntity
 
     #[ORM\Column(type: 'date_absolute')]
     protected DateTimeInterface $registeredAt;
-
-    #[ORM\OneToMany('author', Post::class)]
-    protected ArrayCollection $posts;
 
     #[ORM\OneToOne(targetEntity: Address::class)]
     #[ORM\JoinColumn(referencedColumnName: 'id', nullable: true)]

@@ -25,7 +25,7 @@ class LogSerializer
 
     public function formatEntity(EntityManagerInterface $entityManager, object $entity): string
     {
-        $metadata = $entityManager->getClassMetadata(get_class($entity));
+        $metadata = $entityManager->getMetadataFactory()->getMetadataFor($entity::class);
         $data = array();
 
         // Regular fields
