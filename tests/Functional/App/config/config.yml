@@ -30,6 +30,9 @@ services:
     autoconfigure: true
     public: true
 
+  AssoConnect\LogBundle\Serializer\LogSerializer:
+    class: AssoConnect\LogBundle\Serializer\LogSerializer
+
   AssoConnect\LogBundle\Tests\Functional\Service\LogFactory:
     autowire: true
 
