@@ -12,20 +12,23 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: ['8.2', '8.3']
+        dependency-versions: ['lowest', 'highest']
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       
-      - uses: shivammathur/setup-php@2.10.0
+      - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
       
       - run: composer validate --strict
       
-      - run: composer install --prefer-dist --no-progress --no-suggest
-      
+      - uses: ramsey/composer-install@v2
+        with:
+          dependency-versions: ${{ matrix.dependency-versions }}
+
       - run: vendor/bin/phpcs
         if: ${{ failure() ||  success() }}
 
