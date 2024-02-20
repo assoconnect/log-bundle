@@ -73,11 +73,12 @@ class LogSerializer
     private function formatValue($value): mixed
     {
         switch (gettype($value)) {
+            case 'string':
+                return 60_000 < strlen($value) ? mb_substr($value, 0, 60_000) : value;
             case 'NULL':
             case 'boolean':
             case 'double':
             case 'integer':
-            case 'string':
                 // Scalar so no need to format it
                 return $value;
             case 'object':
