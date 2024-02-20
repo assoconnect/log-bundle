@@ -15,6 +15,7 @@ class LogSerializer
 {
     // Maximum number of associations to log in order to avoid column oversize
     public const ASSOCIATION_MAX_TO_LOG = 1000;
+    public const MAX_STRING_LENGTH = 60_000;
 
     private PropertyAccessor $propertyAccessor;
 
@@ -74,7 +75,8 @@ class LogSerializer
     {
         switch (gettype($value)) {
             case 'string':
-                return 60_000 < strlen($value) ? mb_substr($value, 0, 60_000) : value;
+                return self::MAX_STRING_LENGTH < strlen($value)
+                    ? mb_substr($value, 0, self::MAX_STRING_LENGTH) : $value;
             case 'NULL':
             case 'boolean':
             case 'double':
