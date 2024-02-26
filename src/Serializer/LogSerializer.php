@@ -73,24 +73,13 @@ class LogSerializer
      */
     private function formatValue($value): mixed
     {
-        switch (gettype($value)) {
-            case 'string':
-                return self::MAX_STRING_LENGTH < strlen($value)
-                    ? mb_substr($value, 0, self::MAX_STRING_LENGTH) : $value;
-            case 'NULL':
-            case 'boolean':
-            case 'double':
-            case 'integer':
-                // Scalar so no need to format it
-                return $value;
-            case 'object':
-                return $this->formatObject($value);
-            case 'array':
-                // Recursive call on each iterable item
-                return array_map(__METHOD__, $value);
-            default:
-                throw new \DomainException('Unhandled type');
-        }
+        return match (gettype($value)) {
+            'string' => mb_substr($value, 0, self::MAX_STRING_LENGTH),
+            'NULL', 'boolean', 'double', 'integer' => $value,
+            'object' => $this->formatObject($value),
+            'array' => array_map(__METHOD__, $value),
+            default => throw new \DomainException('Unhandled type'),
+        };
     }
 
     /**
