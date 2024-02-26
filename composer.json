@@ -34,20 +34,20 @@
         "symfony/yaml": "^5.0|^6.0",
         "symfony/validator": "^5.2|^6.0",
         "phpstan/phpstan-symfony": "^1.0",
-        "assoconnect/php-quality-config": "^1.2",
+        "assoconnect/php-quality-config": "^1.10",
         "symfony/security-core": "^5.0|^6.0"
     },
     "require": {
         "php": "^8.2",
-        "symfony/framework-bundle": "^5.0|^6.0",
+        "symfony/framework-bundle": "^5.3|^6.0",
         "doctrine/dbal": "^2.10|^3.0",
         "symfony/serializer": "^5.1|^6.0",
-        "symfony/property-access": "^5.1|^6.0",
-        "doctrine/doctrine-bundle": "^1.9|^2.0",
+        "symfony/property-access": "^5.4|^6.0",
+        "doctrine/doctrine-bundle": "^2.11",
         "doctrine/orm": "^2.9",
         "moneyphp/money": "^3.2|^4.0",
         "ext-json": "*",
-        "ramsey/uuid": "^3.7|^4.0",
+        "ramsey/uuid": "^4.3",
         "ramsey/uuid-doctrine": "^1.4"
     },
     "config": {
