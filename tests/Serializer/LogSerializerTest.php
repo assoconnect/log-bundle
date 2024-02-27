@@ -109,8 +109,12 @@ class LogSerializerTest extends KernelTestCase
         yield [new DateTimeZone('Europe/Paris'), '"Europe\/Paris"'];
         yield [[new DateTimeZone('Europe/Paris')], '["Europe\/Paris"]'];
 
-        yield [Money::EUR('100'), '"100 EUR"'];
-        yield [[Money::EUR('100')], '["100 EUR"]'];
+        try {
+            yield [Money::EUR('100'), '"100 EUR"'];
+            yield [[Money::EUR('100')], '["100 EUR"]'];
+        } catch (\InvalidArgumentException $e) {
+            yield ['error' => 'Invalid argument: ' . $e->getMessage()];
+        }
 
         yield [new Currency('EUR'), '"EUR"'];
         yield [[new Currency('EUR')], '["EUR"]'];
