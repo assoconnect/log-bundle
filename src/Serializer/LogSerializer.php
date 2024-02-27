@@ -78,6 +78,7 @@ class LogSerializer
             'NULL', 'boolean', 'double', 'integer' => $value,
             'object' => $this->formatObject($value),
             'array' => array_map(__METHOD__, $value),
+            default => throw new \DomainException('Unhandled type'),
         };
     }
 
