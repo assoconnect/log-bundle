@@ -1,6 +1,0 @@
-parameters:
-	ignoreErrors:
-		-
-			message: "#^Parameter \\#1 \\$value of method AssoConnect\\\\LogBundle\\\\Serializer\\\\LogSerializer\\:\\:formatValue\\(\\) cannot have array\\|bool\\|float\\|int\\|object\\|string\\|null as its type \\- floats are not allowed\\.$#"
-			count: 1
-			path: src/Serializer/LogSerializer.php

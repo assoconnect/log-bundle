@@ -70,8 +70,6 @@ class LogSerializer
 
     /**
      * Returns a formatted value depending on the given value's type.
-     *
-     * @param string|null|object|array|bool|double|int $value
      */
     private function formatValue($value): mixed
     {
@@ -80,6 +78,7 @@ class LogSerializer
             'NULL', 'boolean', 'double', 'integer' => $value,
             'object' => $this->formatObject($value),
             'array' => array_map(__METHOD__, $value),
+            default => throw new \InvalidArgumentException('Unhandled type'),
         };
     }
 
