@@ -13,6 +13,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\MappedSuperclass]
 abstract class Log
 {
+    public const MAX_STRING_LENGTH = 60_000;
+
     public function __construct(
         object $entity,
         string $entityColumn,
@@ -21,7 +23,7 @@ abstract class Log
     ) {
         $this->entityClass = $entity::class;
         $this->entityColumn = $entityColumn;
-        $this->entityOldValue = $entityOldValue;
+        $this->entityOldValue = mb_substr($entityOldValue, 0, Log::MAX_STRING_LENGTH);
         $this->requestTrace = $requestTrace;
         $this->createdAt = new DateTimeImmutable();
     }
@@ -53,18 +55,18 @@ abstract class Log
     #[ORM\Column]
     protected string $entityColumn = '';
 
-    #[ORM\Column(type: 'text', length: 65535, nullable: true)]
+    #[ORM\Column(type: 'text', length: self::MAX_STRING_LENGTH, nullable: true)]
     protected ?string $entityOldValue = null;
 
     #[Assert\NotBlank]
-    #[ORM\Column(type: 'text', length: 65535)]
+    #[ORM\Column(type: 'text', length: self::MAX_STRING_LENGTH)]
     protected string $requestTrace = '';
 
     #[ORM\Column]
     protected string $requestMethod = '';
 
     #[Assert\Url]
-    #[ORM\Column(type: 'text', length: 65535)]
+    #[ORM\Column(type: 'text', length: self::MAX_STRING_LENGTH)]
     protected string $requestUrl = '';
 
     #[ORM\Column(type: 'ip')]

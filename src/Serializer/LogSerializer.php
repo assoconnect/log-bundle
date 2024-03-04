@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Serializer;
 
+use AssoConnect\LogBundle\Entity\Log;
 use AssoConnect\LogBundle\Exception\UnsupportObjectException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,7 +16,6 @@ class LogSerializer
 {
     // Maximum number of associations to log in order to avoid column oversize
     public const ASSOCIATION_MAX_TO_LOG = 1000;
-    public const MAX_STRING_LENGTH = 60_000;
 
     private PropertyAccessor $propertyAccessor;
 
@@ -74,7 +74,7 @@ class LogSerializer
     private function formatValue($value): mixed
     {
         return match (gettype($value)) {
-            'string' => mb_substr($value, 0, self::MAX_STRING_LENGTH),
+            'string' => mb_substr($value, 0, Log::MAX_STRING_LENGTH),
             'NULL', 'boolean', 'double', 'integer' => $value,
             'object' => $this->formatObject($value),
             'array' => array_map(__METHOD__, $value),
