@@ -15,6 +15,7 @@ class LogSerializer
 {
     // Maximum number of associations to log in order to avoid column oversize
     public const ASSOCIATION_MAX_TO_LOG = 1000;
+    public const MAX_STRING_LENGTH = 60_000;
 
     private PropertyAccessor $propertyAccessor;
 
@@ -72,22 +73,14 @@ class LogSerializer
      */
     private function formatValue($value): mixed
     {
-        switch (gettype($value)) {
-            case 'NULL':
-            case 'boolean':
-            case 'double':
-            case 'integer':
-            case 'string':
-                // Scalar so no need to format it
-                return $value;
-            case 'object':
-                return $this->formatObject($value);
-            case 'array':
-                // Recursive call on each iterable item
-                return array_map(__METHOD__, $value);
-            default:
-                throw new \DomainException('Unhandled type');
-        }
+        return match (gettype($value)) {
+            'string' => mb_substr($value, 0, self::MAX_STRING_LENGTH),
+            'NULL', 'boolean', 'double', 'integer' => $value,
+            'object' => $this->formatObject($value),
+            'array' => array_map(__METHOD__, $value),
+            'resource', 'resource (closed)', 'unknown type'
+                => throw new \InvalidArgumentException('Unhandled type'),
+        };
     }
 
     /**

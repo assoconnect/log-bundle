@@ -92,6 +92,10 @@ class LogSerializerTest extends KernelTestCase
 
         yield ['foo', '"foo"'];
         yield [['foo'], '["foo"]'];
+        yield [
+            str_repeat('a', 70000),
+            '"' . str_repeat('a', LogSerializer::MAX_STRING_LENGTH) . '"',
+        ];
 
         yield [1, '1'];
         yield [[1], '[1]'];
