@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Tests\Serializer;
 
+use AssoConnect\LogBundle\Entity\Log;
 use AssoConnect\LogBundle\Exception\UnsupportObjectException;
 use AssoConnect\LogBundle\Serializer\LogSerializer;
 use AssoConnect\LogBundle\Tests\Functional\Entity\AbstractEntity;
@@ -94,7 +95,7 @@ class LogSerializerTest extends KernelTestCase
         yield [['foo'], '["foo"]'];
         yield [
             str_repeat('a', 70000),
-            '"' . str_repeat('a', LogSerializer::MAX_STRING_LENGTH) . '"',
+            '"' . str_repeat('a', Log::MAX_STRING_LENGTH) . '"',
         ];
 
         yield [1, '1'];
