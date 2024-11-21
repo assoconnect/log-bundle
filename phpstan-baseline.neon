@@ -1,6 +1,1 @@
-parameters:
-	ignoreErrors:
-		-
-			message: "#^Throwing checked exception InvalidArgumentException in yielding method is denied as it gets thrown upon Generator iteration$#"
-			count: 2
-			path: tests/Serializer/LogSerializerTest.php
+
