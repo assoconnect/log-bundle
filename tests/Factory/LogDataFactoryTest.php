@@ -14,8 +14,7 @@ use Doctrine\ORM\UnitOfWork;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class
-LogDataFactoryTest extends KernelTestCase
+class LogDataFactoryTest extends KernelTestCase
 {
     public function testExcludedEntityIsIgnored(): void
     {
