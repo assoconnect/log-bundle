@@ -6,11 +6,10 @@ namespace AssoConnect\LogBundle\Tests\Subscriber;
 
 use AssoConnect\LogBundle\Entity\Log;
 use AssoConnect\LogBundle\Factory\LogDataFactory;
-use AssoConnect\LogBundle\Factory\LogFactoryInterface;
 use AssoConnect\LogBundle\Subscriber\LoggerSubscriber;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Address;
 use AssoConnect\LogBundle\Tests\Functional\Service\LogFactory;
-use Doctrine\Common\EventManager;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
@@ -21,16 +20,15 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class LoggerSubscriberTest extends KernelTestCase
 {
-    public function testEventSubscription(): void
+    public function testEventSubscriptionAsAnAttribute(): void
     {
-        self::assertSame(
-            [Events::onFlush],
-            (new LoggerSubscriber(
-                $this->createMock(LogFactoryInterface::class),
-                $this->createMock(LogDataFactory::class),
-                realpath(__DIR__ .  '/../..')
-            ))->getSubscribedEvents()
-        );
+        $reflection = new \ReflectionClass(LoggerSubscriber::class);
+        $attributes = $reflection->getAttributes(AsDoctrineListener::class);
+
+        self::assertCount(1, $attributes, 'LoggerSubscriber should have AsDoctrineListener attribute');
+
+        $attribute = $attributes[0]->newInstance();
+        self::assertSame(Events::onFlush, $attribute->event);
     }
 
     public function testSubscriberPersistsLogs(): void
@@ -71,8 +69,6 @@ class LoggerSubscriberTest extends KernelTestCase
             realpath(__DIR__ .  '/../..')
         );
 
-        $dispatcher = new EventManager();
-        $dispatcher->addEventSubscriber($subscriber);
-        $dispatcher->dispatchEvent(Events::onFlush, $event);
+        $subscriber->onFlush($event);
     }
 }

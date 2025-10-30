@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Tests\Functional\Entity;
 
-use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,8 +15,8 @@ abstract class AbstractEntity
     public function __construct()
     {
         $this->id = rand(0, 10000000);
-        $this->createdAt = new DateTime();
-        $this->updatedAt = new DateTime();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function __toString(): string

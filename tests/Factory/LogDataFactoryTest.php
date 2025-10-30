@@ -71,7 +71,7 @@ class LogDataFactoryTest extends KernelTestCase
         $unitOfWork->method('getEntityChangeSet')->with($updatedAuthor)->willReturn(
             [
                 'email' => ['test@gmail.com'],
-                'registeredAt' => [new \DateTime('2020-10-06')],
+                'registeredAt' => [new \DateTimeImmutable('2020-10-06')],
                 'unmappedField' => ['test'],
                 'address' => [new Address()],
             ]

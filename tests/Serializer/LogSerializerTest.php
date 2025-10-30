@@ -12,7 +12,6 @@ use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
 use AssoConnect\LogBundle\Tests\Functional\Entity\ObjectWithoutId;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Post;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Tag;
-use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -104,8 +103,8 @@ class LogSerializerTest extends KernelTestCase
         yield [1.5, '1.5'];
         yield [[1.5], '[1.5]'];
 
-        yield [new DateTime('@1529500134'), '"2018-06-20T13:08:54+0000"'];
-        yield [[new DateTime('@1529500134')], '["2018-06-20T13:08:54+0000"]'];
+        yield [new \DateTimeImmutable('@1529500134'), '"2018-06-20T13:08:54+0000"'];
+        yield [[new \DateTimeImmutable('@1529500134')], '["2018-06-20T13:08:54+0000"]'];
 
         yield [new DateTimeZone('Europe/Paris'), '"Europe\/Paris"'];
         yield [[new DateTimeZone('Europe/Paris')], '["Europe\/Paris"]'];
