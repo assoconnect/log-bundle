@@ -9,7 +9,6 @@ use AssoConnect\LogBundle\Factory\LogFactoryInterface;
 use AssoConnect\LogBundle\Factory\RequestContextAwareLogFactoryInterface;
 use AssoConnect\LogBundle\Factory\SecurityContextAwareLogFactoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
-use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 
