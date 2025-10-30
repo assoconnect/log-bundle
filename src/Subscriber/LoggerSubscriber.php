@@ -8,6 +8,7 @@ use AssoConnect\LogBundle\Factory\LogDataFactory;
 use AssoConnect\LogBundle\Factory\LogFactoryInterface;
 use AssoConnect\LogBundle\Factory\RequestContextAwareLogFactoryInterface;
 use AssoConnect\LogBundle\Factory\SecurityContextAwareLogFactoryInterface;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
@@ -16,18 +17,14 @@ use Doctrine\ORM\Events;
  * This Doctrine subscriber creates a Log entity every time
  * a fully Doctrine-managed entity is persisted, updated, or removed.
  */
-class LoggerSubscriber implements EventSubscriber
+#[AsDoctrineListener(event: Events::onFlush)]
+class LoggerSubscriber
 {
     public function __construct(
         private readonly LogFactoryInterface $factory,
         private readonly LogDataFactory $logDataFactory,
         private readonly string $projectDir
     ) {
-    }
-
-    public function getSubscribedEvents(): array
-    {
-        return [Events::onFlush];
     }
 
     public function onFlush(OnFlushEventArgs $eventArgs): void
