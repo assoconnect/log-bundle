@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Tests\Functional\Entity;
 
-use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 

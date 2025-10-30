@@ -12,7 +12,6 @@ use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
 use AssoConnect\LogBundle\Tests\Functional\Entity\ObjectWithoutId;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Post;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Tag;
-use DateTime;
 use DateTimeZone;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
