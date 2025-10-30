@@ -16,8 +16,8 @@ abstract class AbstractEntity
     public function __construct()
     {
         $this->id = rand(0, 10000000);
-        $this->createdAt = new DateTime();
-        $this->updatedAt = new DateTime();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function __toString(): string

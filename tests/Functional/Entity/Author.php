@@ -13,7 +13,7 @@ class Author extends AbstractEntity
     public function __construct()
     {
         parent::__construct();
-        $this->registeredAt = new \DateTime();
+        $this->registeredAt = new \DateTimeImmutable();
     }
 
     #[ORM\Column(type: 'email')]

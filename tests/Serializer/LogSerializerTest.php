@@ -104,8 +104,8 @@ class LogSerializerTest extends KernelTestCase
         yield [1.5, '1.5'];
         yield [[1.5], '[1.5]'];
 
-        yield [new DateTime('@1529500134'), '"2018-06-20T13:08:54+0000"'];
-        yield [[new DateTime('@1529500134')], '["2018-06-20T13:08:54+0000"]'];
+        yield [new \DateTimeImmutable('@1529500134'), '"2018-06-20T13:08:54+0000"'];
+        yield [[new \DateTimeImmutable('@1529500134')], '["2018-06-20T13:08:54+0000"]'];
 
         yield [new DateTimeZone('Europe/Paris'), '"Europe\/Paris"'];
         yield [[new DateTimeZone('Europe/Paris')], '["Europe\/Paris"]'];
