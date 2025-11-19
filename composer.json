@@ -35,8 +35,7 @@
         "symfony/validator": "^6.4",
         "phpstan/phpstan-symfony": "^1.0",
         "assoconnect/php-quality-config": "^1.16",
-        "symfony/security-core": "^6.4",
-        "rector/rector": "^1.2"
+        "symfony/security-core": "^6.4"
     },
     "require": {
         "php": "^8.2",
