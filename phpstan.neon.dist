@@ -7,7 +7,7 @@ parameters:
         uncheckedExceptionClasses:
             - 'Doctrine\Persistence\Mapping\MappingException'
             - 'ReflectionException'
-	ignoreErrors:
+    ignoreErrors:
         -
             message: '#^Call to method arrayNode\(\) on an unknown class Symfony\\Component\\Config\\Definition\\Builder\\NodeBuilder\<Symfony\\Component\\Config\\Definition\\Builder\\ArrayNodeDefinition\>\.$#'
             path: src/DependencyInjection/Configuration.php
