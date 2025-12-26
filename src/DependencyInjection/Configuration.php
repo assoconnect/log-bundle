@@ -13,6 +13,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('log');
 
+        /** @phpstan-ignore class.notFound */
         $treeBuilder->getRootNode()
             ->children()
                 ->arrayNode('log_filters')
