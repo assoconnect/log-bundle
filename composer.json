@@ -44,7 +44,7 @@
         "symfony/serializer": "^6.4|^7.0",
         "symfony/property-access": "^6.4|^7.0",
         "doctrine/doctrine-bundle": "^2.11",
-        "doctrine/orm": "^2.9",
+        "doctrine/orm": "^2.9|^3.3",
         "moneyphp/money": "^3.2|^4.0",
         "ext-json": "*",
         "ramsey/uuid": "^4.3",
