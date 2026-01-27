@@ -34,7 +34,7 @@
         "symfony/yaml": "^6.4|^7.0",
         "symfony/validator": "^6.4|^7.0",
         "phpstan/phpstan-symfony": "^1.0",
-        "assoconnect/php-quality-config": "^1.16",
+        "assoconnect/php-quality-config": "^2",
         "symfony/security-core": "^6.4|^7.0"
     },
     "require": {
