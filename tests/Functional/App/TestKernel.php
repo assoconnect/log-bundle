@@ -14,11 +14,9 @@ class TestKernel extends Kernel
 {
     public function registerBundles(): iterable
     {
-        return [
-            new FrameworkBundle(),
-            new LogBundle(),
-            new DoctrineBundle(),
-        ];
+        yield new FrameworkBundle();
+        yield new LogBundle();
+        yield new DoctrineBundle();
     }
 
     public function getCacheDir(): string
@@ -29,11 +27,6 @@ class TestKernel extends Kernel
     public function getLogDir(): string
     {
         return $this->basePath() . 'logs';
-    }
-
-    public function getRootDir(): string
-    {
-        return __DIR__;
     }
 
     /**
