@@ -22,6 +22,7 @@ class FunctionalLog extends Log
         string $requestTrace,
     ) {
         $this->id = Uuid::uuid1();
+        /** @phpstan-ignore method.notFound */
         $this->entityId = (string) $entity->getId();
         parent::__construct(
             $entity,

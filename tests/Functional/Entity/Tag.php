@@ -16,6 +16,7 @@ class Tag extends AbstractEntity
         $this->posts = new ArrayCollection();
     }
 
+    /** @var ArrayCollection<int, Post> */
     #[ORM\ManyToMany(Post::class, 'tags')]
     protected ArrayCollection $posts;
 

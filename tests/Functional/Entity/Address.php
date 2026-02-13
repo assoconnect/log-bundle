@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Address extends AbstractEntity
 {
+    /** @phpstan-ignore property.unusedType */
     private ?string $streetName = null;
 
     public function __construct()

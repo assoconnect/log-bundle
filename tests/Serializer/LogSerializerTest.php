@@ -34,8 +34,10 @@ class LogSerializerTest extends KernelTestCase
         $post->addTag($tag);
 
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        self::assertInstanceOf(EntityManagerInterface::class, $entityManager);
 
         $formatter = self::getContainer()->get(LogSerializer::class);
+        self::assertInstanceOf(LogSerializer::class, $formatter);
         self::assertSame(
             json_encode(array_merge(
                 $this->helperFormatEntity($author),
@@ -64,6 +66,7 @@ class LogSerializerTest extends KernelTestCase
         );
     }
 
+    /** @return array<string, mixed> */
     public function helperFormatEntity(AbstractEntity $entity): array
     {
         return [
@@ -76,7 +79,7 @@ class LogSerializerTest extends KernelTestCase
     /**
      * @dataProvider providerFormatValueAsString
      */
-    public function testFormatValueAsStringWorks($value, $formatted): void
+    public function testFormatValueAsStringWorks(mixed $value, string $formatted): void
     {
         $formatter = new LogSerializer();
         self::assertSame($formatted, $formatter->formatValueAsString($value));

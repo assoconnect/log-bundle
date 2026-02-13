@@ -19,6 +19,7 @@ class LogDataFactoryTest extends KernelTestCase
     public function testExcludedEntityIsIgnored(): void
     {
         $em = self::getContainer()->get(EntityManagerInterface::class);
+        self::assertInstanceOf(EntityManagerInterface::class, $em);
         $em->persist(new Author());
         $em->getUnitOfWork()->computeChangeSets();
 
@@ -31,6 +32,7 @@ class LogDataFactoryTest extends KernelTestCase
     public function testNewEntityIsLogged(): void
     {
         $em = self::getContainer()->get(EntityManagerInterface::class);
+        self::assertInstanceOf(EntityManagerInterface::class, $em);
         $em->persist($createdAuthor = new Author());
         $em->getUnitOfWork()->computeChangeSets();
 
@@ -94,6 +96,7 @@ class LogDataFactoryTest extends KernelTestCase
     private function mockEntityManager(): array
     {
         $emReal = self::getContainer()->get(EntityManagerInterface::class);
+        self::assertInstanceOf(EntityManagerInterface::class, $emReal);
         $em = $this->createMock(EntityManagerInterface::class);
 
         $unitOfWork = $this->createMock(UnitOfWork::class);

@@ -47,12 +47,12 @@ class LogSerializer
             }
         }
 
-        return json_encode($data, JSON_PRETTY_PRINT);
+        return (string) json_encode($data, JSON_PRETTY_PRINT);
     }
 
-    public function formatValueAsString($value): string
+    public function formatValueAsString(mixed $value): string
     {
-        return json_encode($this->formatValue($value));
+        return (string) json_encode($this->formatValue($value));
     }
 
     /**
@@ -71,7 +71,7 @@ class LogSerializer
     /**
      * Returns a formatted value depending on the given value's type.
      */
-    private function formatValue($value): mixed
+    private function formatValue(mixed $value): mixed
     {
         return match (gettype($value)) {
             'string' => mb_substr($value, 0, Log::MAX_STRING_LENGTH),

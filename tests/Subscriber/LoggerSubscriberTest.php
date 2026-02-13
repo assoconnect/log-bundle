@@ -66,7 +66,7 @@ class LoggerSubscriberTest extends KernelTestCase
         $subscriber = new LoggerSubscriber(
             $logFactory,
             $logDataFactory,
-            realpath(__DIR__ .  '/../..')
+            (string) realpath(__DIR__ .  '/../..')
         );
 
         $subscriber->onFlush($event);

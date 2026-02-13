@@ -21,7 +21,7 @@ class Post extends AbstractEntity
     }
 
     #[Assert\NotBlank]
-    protected $title;
+    protected ?string $title = null;
 
     #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'posts')]
     protected Author $author;
@@ -31,9 +31,11 @@ class Post extends AbstractEntity
         return $this->author;
     }
 
+    /** @var ArrayCollection<int, Tag> */
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'posts')]
     protected ArrayCollection $tags;
 
+    /** @return Collection<int, Tag> */
     public function getTags(): Collection
     {
         return $this->tags;
