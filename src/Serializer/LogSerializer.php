@@ -77,7 +77,7 @@ class LogSerializer
             'string' => mb_substr($value, 0, Log::MAX_STRING_LENGTH),
             'NULL', 'boolean', 'double', 'integer' => $value,
             'object' => $this->formatObject($value),
-            'array' => array_map(__METHOD__, $value),
+            'array' => array_map($this->formatValue(...), $value),
             'resource', 'resource (closed)', 'unknown type'
                 => throw new \InvalidArgumentException('Unhandled type'),
         };
