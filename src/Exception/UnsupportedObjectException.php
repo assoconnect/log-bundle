@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AssoConnect\LogBundle\Exception;
 
-class UnsupportObjectException extends \DomainException
+class UnsupportedObjectException extends \DomainException
 {
     public function __construct(object $object, int $code = 0, ?\Throwable $previous = null)
     {

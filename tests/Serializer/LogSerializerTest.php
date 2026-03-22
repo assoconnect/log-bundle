@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AssoConnect\LogBundle\Tests\Serializer;
 
 use AssoConnect\LogBundle\Entity\Log;
-use AssoConnect\LogBundle\Exception\UnsupportObjectException;
+use AssoConnect\LogBundle\Exception\UnsupportedObjectException;
 use AssoConnect\LogBundle\Serializer\LogSerializer;
 use AssoConnect\LogBundle\Tests\Functional\Entity\AbstractEntity;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
@@ -132,7 +132,7 @@ class LogSerializerTest extends KernelTestCase
     {
         $formatter = new LogSerializer();
 
-        $this->expectException(UnsupportObjectException::class);
+        $this->expectException(UnsupportedObjectException::class);
 
         $formatter->formatValueAsString(new ObjectWithoutId());
     }

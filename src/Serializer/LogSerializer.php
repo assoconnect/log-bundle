@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AssoConnect\LogBundle\Serializer;
 
 use AssoConnect\LogBundle\Entity\Log;
-use AssoConnect\LogBundle\Exception\UnsupportObjectException;
+use AssoConnect\LogBundle\Exception\UnsupportedObjectException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Money\Money;
@@ -124,6 +124,6 @@ class LogSerializer
             return $value->__toString();
         }
 
-        throw new UnsupportObjectException($value);
+        throw new UnsupportedObjectException($value);
     }
 }
