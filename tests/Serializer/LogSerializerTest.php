@@ -82,7 +82,7 @@ class LogSerializerTest extends KernelTestCase
         self::assertSame($formatted, $formatter->formatValueAsString($value));
     }
 
-    public function providerFormatValueAsString(): iterable
+    public static function providerFormatValueAsString(): iterable
     {
         yield [null, 'null'];
         yield [[null], '[null]'];
