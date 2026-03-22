@@ -16,13 +16,12 @@ class FunctionalLog extends Log
     protected UuidInterface $id;
 
     public function __construct(
-        object $entity,
+        AbstractEntity $entity,
         string $entityColumn,
         ?string $entityOldValue,
         string $requestTrace,
     ) {
         $this->id = Uuid::uuid1();
-        /** @phpstan-ignore method.notFound */
         $this->entityId = (string) $entity->getId();
         parent::__construct(
             $entity,

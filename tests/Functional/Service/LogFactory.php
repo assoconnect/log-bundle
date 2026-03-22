@@ -6,6 +6,7 @@ namespace AssoConnect\LogBundle\Tests\Functional\Service;
 
 use AssoConnect\LogBundle\Entity\Log;
 use AssoConnect\LogBundle\Factory\LogFactoryInterface;
+use AssoConnect\LogBundle\Tests\Functional\Entity\AbstractEntity;
 use AssoConnect\LogBundle\Tests\Functional\Entity\FunctionalLog;
 
 class LogFactory implements LogFactoryInterface
@@ -16,6 +17,7 @@ class LogFactory implements LogFactoryInterface
         ?string $entityOldValue,
         string $requestTrace,
     ): Log {
+        assert($entity instanceof AbstractEntity);
         return new FunctionalLog(
             $entity,
             $entityColumn,
