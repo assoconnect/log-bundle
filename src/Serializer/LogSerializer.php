@@ -12,6 +12,8 @@ use Money\Money;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
+use function Safe\json_encode;
+
 class LogSerializer
 {
     // Maximum number of associations to log in order to avoid column oversize
@@ -47,12 +49,12 @@ class LogSerializer
             }
         }
 
-        return (string) json_encode($data, JSON_PRETTY_PRINT);
+        return json_encode($data, JSON_PRETTY_PRINT);
     }
 
     public function formatValueAsString(mixed $value): string
     {
-        return (string) json_encode($this->formatValue($value));
+        return json_encode($this->formatValue($value));
     }
 
     /**

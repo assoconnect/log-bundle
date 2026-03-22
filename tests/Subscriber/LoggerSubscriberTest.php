@@ -18,6 +18,8 @@ use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\UnitOfWork;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
+use function Safe\realpath;
+
 class LoggerSubscriberTest extends KernelTestCase
 {
     public function testEventSubscriptionAsAnAttribute(): void
@@ -66,7 +68,7 @@ class LoggerSubscriberTest extends KernelTestCase
         $subscriber = new LoggerSubscriber(
             $logFactory,
             $logDataFactory,
-            (string) realpath(__DIR__ .  '/../..')
+            realpath(__DIR__ .  '/../..')
         );
 
         $subscriber->onFlush($event);

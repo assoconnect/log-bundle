@@ -48,7 +48,8 @@
         "moneyphp/money": "^3.2|^4.0",
         "ext-json": "*",
         "ramsey/uuid": "^4.3",
-        "ramsey/uuid-doctrine": "^1.4"
+        "ramsey/uuid-doctrine": "^1.4",
+        "thecodingmachine/safe": "^3.4"
     },
     "config": {
         "allow-plugins": {
