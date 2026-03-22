@@ -21,7 +21,7 @@ class Address extends AbstractEntity
         return $this->streetName;
     }
 
-    public function setStreetName(?string $streetName): self
+    public function setStreetName(string $streetName): self
     {
         $this->streetName = $streetName;
 

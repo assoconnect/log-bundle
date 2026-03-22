@@ -16,7 +16,7 @@ class FunctionalLog extends Log
     protected UuidInterface $id;
 
     public function __construct(
-        object $entity,
+        AbstractEntity $entity,
         string $entityColumn,
         ?string $entityOldValue,
         string $requestTrace,

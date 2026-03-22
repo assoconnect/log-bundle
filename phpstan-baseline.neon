@@ -1,6 +1,13 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Throwing checked exception InvalidArgumentException in yielding method is denied as it gets thrown upon Generator iteration$#"
+			message: '#^Call to an undefined method object\:\:getId\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Serializer/LogSerializer.php
+
+		-
+			message: '#^Throwing checked exception InvalidArgumentException in yielding method is denied as it gets thrown upon Generator iteration$#'
+			identifier: shipmonk.checkedExceptionInYieldingMethod
 			count: 2
 			path: tests/Serializer/LogSerializerTest.php

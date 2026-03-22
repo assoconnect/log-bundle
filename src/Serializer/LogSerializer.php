@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace AssoConnect\LogBundle\Serializer;
 
 use AssoConnect\LogBundle\Entity\Log;
-use AssoConnect\LogBundle\Exception\UnsupportObjectException;
+use AssoConnect\LogBundle\Exception\UnsupportedObjectException;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Money\Money;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
+
+use function Safe\json_encode;
 
 class LogSerializer
 {
@@ -50,7 +52,7 @@ class LogSerializer
         return json_encode($data, JSON_PRETTY_PRINT);
     }
 
-    public function formatValueAsString($value): string
+    public function formatValueAsString(mixed $value): string
     {
         return json_encode($this->formatValue($value));
     }
@@ -71,7 +73,7 @@ class LogSerializer
     /**
      * Returns a formatted value depending on the given value's type.
      */
-    private function formatValue($value): mixed
+    private function formatValue(mixed $value): mixed
     {
         return match (gettype($value)) {
             'string' => mb_substr($value, 0, Log::MAX_STRING_LENGTH),
@@ -122,6 +124,6 @@ class LogSerializer
             return $value->__toString();
         }
 
-        throw new UnsupportObjectException($value);
+        throw new UnsupportedObjectException($value);
     }
 }

@@ -11,6 +11,10 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 /** @phpstan-type LogData array{entity: object, entityColumn: string, entityOldValue: ?string} */
 class LogDataFactory
 {
+    /**
+     * @param list<class-string> $includedEntities
+     * @param list<class-string> $excludedEntities
+     */
     public function __construct(
         private readonly LogSerializer $formatter,
         private readonly array $includedEntities,
@@ -54,7 +58,7 @@ class LogDataFactory
         }
     }
 
-    private function isLoggable($entity): bool
+    private function isLoggable(object $entity): bool
     {
         if ($this->isSubClassFromList($entity, $this->excludedEntities)) {
             return false;
@@ -63,7 +67,10 @@ class LogDataFactory
         return [] === $this->includedEntities || $this->isSubClassFromList($entity, $this->includedEntities);
     }
 
-    private function isSubClassFromList($entity, array $classes): bool
+    /**
+     * @param list<class-string> $classes
+     */
+    private function isSubClassFromList(object $entity, array $classes): bool
     {
         foreach ($classes as $class) {
             if (is_a($entity, $class)) {
@@ -75,7 +82,7 @@ class LogDataFactory
     }
 
     /** @return LogData[] */
-    private function getLogsForEntityFields($entity, EntityManagerInterface $entityManager): iterable
+    private function getLogsForEntityFields(object $entity, EntityManagerInterface $entityManager): iterable
     {
         $unitOfWork = $entityManager->getUnitOfWork();
 

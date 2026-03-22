@@ -23,7 +23,7 @@ abstract class Log
     ) {
         $this->entityClass = $entity::class;
         $this->entityColumn = $entityColumn;
-        $this->entityOldValue = mb_substr($entityOldValue, 0, Log::MAX_STRING_LENGTH);
+        $this->entityOldValue = $entityOldValue !== null ? mb_substr($entityOldValue, 0, Log::MAX_STRING_LENGTH) : null;
         $this->requestTrace = $requestTrace;
         $this->createdAt = new DateTimeImmutable();
     }

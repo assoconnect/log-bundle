@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AssoConnect\LogBundle\Tests\Serializer;
 
 use AssoConnect\LogBundle\Entity\Log;
-use AssoConnect\LogBundle\Exception\UnsupportObjectException;
+use AssoConnect\LogBundle\Exception\UnsupportedObjectException;
 use AssoConnect\LogBundle\Serializer\LogSerializer;
 use AssoConnect\LogBundle\Tests\Functional\Entity\AbstractEntity;
 use AssoConnect\LogBundle\Tests\Functional\Entity\Author;
@@ -34,8 +34,10 @@ class LogSerializerTest extends KernelTestCase
         $post->addTag($tag);
 
         $entityManager = self::getContainer()->get(EntityManagerInterface::class);
+        self::assertInstanceOf(EntityManagerInterface::class, $entityManager);
 
         $formatter = self::getContainer()->get(LogSerializer::class);
+        self::assertInstanceOf(LogSerializer::class, $formatter);
         self::assertSame(
             json_encode(array_merge(
                 $this->helperFormatEntity($author),
@@ -64,6 +66,7 @@ class LogSerializerTest extends KernelTestCase
         );
     }
 
+    /** @return array<string, mixed> */
     public function helperFormatEntity(AbstractEntity $entity): array
     {
         return [
@@ -76,7 +79,7 @@ class LogSerializerTest extends KernelTestCase
     /**
      * @dataProvider providerFormatValueAsString
      */
-    public function testFormatValueAsStringWorks($value, $formatted): void
+    public function testFormatValueAsStringWorks(mixed $value, string $formatted): void
     {
         $formatter = new LogSerializer();
         self::assertSame($formatted, $formatter->formatValueAsString($value));
@@ -129,7 +132,7 @@ class LogSerializerTest extends KernelTestCase
     {
         $formatter = new LogSerializer();
 
-        $this->expectException(UnsupportObjectException::class);
+        $this->expectException(UnsupportedObjectException::class);
 
         $formatter->formatValueAsString(new ObjectWithoutId());
     }
