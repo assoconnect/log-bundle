@@ -38,7 +38,7 @@
         "symfony/security-core": "^7.0"
     },
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "symfony/framework-bundle": "^7.0",
         "doctrine/dbal": "^2.10|^3.0",
         "symfony/serializer": "^7.0",
