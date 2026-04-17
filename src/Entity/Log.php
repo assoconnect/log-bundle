@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AssoConnect\LogBundle\Entity;
 
 use DateTimeImmutable;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,7 +22,7 @@ abstract class Log
         ?string $entityOldValue,
         string $requestTrace,
     ) {
-        $this->entityClass = $entity::class;
+        $this->entityClass = ClassUtils::getRealClass($entity::class);
         $this->entityColumn = $entityColumn;
         $this->entityOldValue = $entityOldValue !== null ? mb_substr($entityOldValue, 0, Log::MAX_STRING_LENGTH) : null;
         $this->requestTrace = $requestTrace;
