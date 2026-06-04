@@ -25,7 +25,7 @@ class LogDataFactory
     /** @return LogData[] */
     public function createFromEvent(OnFlushEventArgs $eventArgs): iterable
     {
-        $em = $eventArgs->getEntityManager();
+        $em = $eventArgs->getObjectManager();
         $unitOfWork = $em->getUnitOfWork();
 
         // Creation

@@ -28,7 +28,7 @@ class LoggerSubscriber
 
     public function onFlush(OnFlushEventArgs $eventArgs): void
     {
-        $em = $eventArgs->getEntityManager();
+        $em = $eventArgs->getObjectManager();
         $unitOfWork = $em->getUnitOfWork();
         $cmf = $em->getMetadataFactory();
         $requestTrace = $this->getRequestTrace();
