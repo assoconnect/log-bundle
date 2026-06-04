@@ -9,6 +9,7 @@ use AssoConnect\LogBundle\Factory\LogFactoryInterface;
 use AssoConnect\LogBundle\Factory\RequestContextAwareLogFactoryInterface;
 use AssoConnect\LogBundle\Factory\SecurityContextAwareLogFactoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 
@@ -28,7 +29,8 @@ class LoggerSubscriber
 
     public function onFlush(OnFlushEventArgs $eventArgs): void
     {
-        $em = $eventArgs->getEntityManager();
+        $em = $eventArgs->getObjectManager();
+        assert($em instanceof EntityManagerInterface);
         $unitOfWork = $em->getUnitOfWork();
         $cmf = $em->getMetadataFactory();
         $requestTrace = $this->getRequestTrace();
