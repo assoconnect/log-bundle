@@ -26,7 +26,6 @@ class LogDataFactory
     public function createFromEvent(OnFlushEventArgs $eventArgs): iterable
     {
         $em = $eventArgs->getObjectManager();
-        assert($em instanceof EntityManagerInterface);
         $unitOfWork = $em->getUnitOfWork();
 
         // Creation
