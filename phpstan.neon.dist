@@ -7,6 +7,12 @@ parameters:
             - 'Doctrine\Persistence\Mapping\MappingException'
             - 'ReflectionException'
 
+    # doctrine/common (ClassUtils) ships with ORM 2 only (^2.20|^3.0 are both supported),
+    # so each analysis run only matches part of the errors around it.
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#unknown class Doctrine\\Common\\Util\\ClassUtils#'
+
 includes:
     - vendor/assoconnect/php-quality-config/phpstan.extension.neon
     - vendor/phpstan/phpstan-symfony/extension.neon

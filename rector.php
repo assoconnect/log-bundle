@@ -14,4 +14,9 @@ return RectorConfig::configure()
     ->withTypeCoverageLevel(0)
     ->withSets([
         __DIR__ . '/vendor/assoconnect/php-quality-config/src/Rector/rules.php',
+    ])
+    // Registered by php-quality-config but deprecated: rector >= 2.5.7 aborts when they match
+    ->withSkip([
+        \Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector::class,
+        \Rector\CodingStyle\Rector\Closure\StaticClosureRector::class,
     ]);

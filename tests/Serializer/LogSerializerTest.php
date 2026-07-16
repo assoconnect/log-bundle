@@ -17,7 +17,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Money\Currency;
 use Money\Money;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase as KernelTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class LogSerializerTest extends KernelTestCase
 {
@@ -76,9 +77,7 @@ class LogSerializerTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @dataProvider providerFormatValueAsString
-     */
+    #[DataProvider('providerFormatValueAsString')]
     public function testFormatValueAsStringWorks(mixed $value, string $formatted): void
     {
         $formatter = new LogSerializer();
