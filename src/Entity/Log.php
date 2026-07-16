@@ -7,6 +7,7 @@ namespace AssoConnect\LogBundle\Entity;
 use DateTimeImmutable;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Persistence\Proxy;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,7 +23,7 @@ abstract class Log
         ?string $entityOldValue,
         string $requestTrace,
     ) {
-        $this->entityClass = ClassUtils::getRealClass($entity::class);
+        $this->entityClass = self::getRealClass($entity);
         $this->entityColumn = $entityColumn;
         $this->entityOldValue = $entityOldValue !== null ? mb_substr($entityOldValue, 0, Log::MAX_STRING_LENGTH) : null;
         $this->requestTrace = $requestTrace;
@@ -126,5 +127,29 @@ abstract class Log
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    /**
+     * doctrine/common (ClassUtils) is no longer installed with ORM 3: its proxies implement
+     * Persistence\Proxy, and native lazy objects (ORM 3.5+) already report the real class.
+     * Excluded from coverage: only one branch can run for a given installed ORM major.
+     *
+     * @codeCoverageIgnore
+     * @return class-string
+     */
+    private static function getRealClass(object $entity): string
+    {
+        if (class_exists(ClassUtils::class)) {
+            return ClassUtils::getRealClass($entity::class);
+        }
+
+        if ($entity instanceof Proxy) {
+            $parent = get_parent_class($entity);
+            if (false !== $parent) {
+                return $parent;
+            }
+        }
+
+        return $entity::class;
     }
 }

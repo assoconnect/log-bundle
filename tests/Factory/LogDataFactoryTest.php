@@ -70,7 +70,7 @@ class LogDataFactoryTest extends KernelTestCase
             ->willReturn([$updatedAuthor = new Author()]);
         $unitOfWork->expects(self::once())->method('getScheduledEntityDeletions')->willReturn([]);
 
-        $unitOfWork->method('getEntityChangeSet')->with($updatedAuthor)->willReturn(
+        $unitOfWork->expects(self::once())->method('getEntityChangeSet')->with($updatedAuthor)->willReturn(
             [
                 'email' => ['test@gmail.com'],
                 'registeredAt' => [new \DateTimeImmutable('2020-10-06')],
