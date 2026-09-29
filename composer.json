@@ -33,10 +33,11 @@
     "require-dev": {
         "symfony/yaml": "^7.4|^8.0",
         "symfony/validator": "^7.4|^8.0",
-        "phpstan/phpstan-symfony": "^2",
+        "phpstan/phpstan-symfony": "^2.0.9",
         "assoconnect/php-quality-config": "^2.2",
         "symfony/security-core": "^7.4|^8.0",
-        "symfony/var-exporter": "^7.4|^8.0"
+        "symfony/var-exporter": "^7.4|^8.0",
+        "symfony/polyfill-php85": "^1.33"
     },
     "require": {
         "php": "^8.4",
@@ -50,7 +51,8 @@
         "ext-json": "*",
         "ramsey/uuid": "^4.3",
         "ramsey/uuid-doctrine": "^1.4|^2.0",
-        "thecodingmachine/safe": "^3.4"
+        "thecodingmachine/safe": "^3.4",
+        "symfony/config": "^7.4.1|^8.0"
     },
     "config": {
         "allow-plugins": {
