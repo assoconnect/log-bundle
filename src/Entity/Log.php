@@ -67,7 +67,7 @@ abstract class Log
     #[ORM\Column]
     protected string $requestMethod = '';
 
-    #[Assert\Url]
+    #[Assert\Url(requireTld: false)]
     #[ORM\Column(type: 'text', length: self::MAX_STRING_LENGTH)]
     protected string $requestUrl = '';
 

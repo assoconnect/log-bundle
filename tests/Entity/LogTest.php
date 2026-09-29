@@ -10,6 +10,7 @@ use AssoConnect\LogBundle\Tests\Functional\Entity\FunctionalLog;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Validation;
 
 class LogTest extends TestCase
 {
@@ -43,5 +44,15 @@ class LogTest extends TestCase
 
         $entity->setSecurityUser($user = $this->createMock(UserInterface::class));
         self::assertSame($user, $entity->getUser());
+    }
+
+    public function testRequestUrlWithoutTldIsValid(): void
+    {
+        $entity = new FunctionalLog(new Address(), 'entityColumn', null, 'request trace');
+        $entity->setRequestContext(new RequestContext(host: 'localhost', path: '/hello'), '127.0.0.1');
+
+        $validator = Validation::createValidatorBuilder()->enableAttributeMapping()->getValidator();
+
+        self::assertCount(0, $validator->validateProperty($entity, 'requestUrl'));
     }
 }

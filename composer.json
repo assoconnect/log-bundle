@@ -54,6 +54,9 @@
         "thecodingmachine/safe": "^3.4",
         "symfony/config": "^7.4.1|^8.0"
     },
+    "conflict": {
+        "symfony/validator": "<7.4"
+    },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
